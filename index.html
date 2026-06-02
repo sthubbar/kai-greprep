@@ -1,0 +1,2797 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>GRE Math Subject Test, adaptive practice (Phase 2)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous"></script>
+<style>
+  :root {
+    --bg: #fafafa; --fg: #1a1a1a; --muted: #6b6b6b; --accent: #2563eb;
+    --good: #16a34a; --bad: #dc2626; --card: #ffffff; --border: #e5e7eb;
+    --hover: #eff6ff; --warn: #b45309; --ok: #15803d; --pace-yellow: #ca8a04;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--fg); }
+  .wrap { max-width: 920px; margin: 0 auto; padding: 18px 20px 80px; }
+  header { border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 18px;
+    display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+  h1 { font-size: 20px; margin: 0 0 2px; }
+  h2 { font-size: 17px; margin: 14px 0 8px; }
+  h3 { font-size: 15px; margin: 10px 0 6px; }
+  .sub { color: var(--muted); font-size: 13px; }
+  button { font: inherit; padding: 7px 12px; border: 1px solid var(--border);
+    background: white; border-radius: 6px; cursor: pointer; }
+  button:hover { background: var(--hover); }
+  button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+  button.primary:hover { background: #1d4ed8; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.ghost { background: transparent; }
+  button.danger { background: var(--bad); color: white; border-color: var(--bad); }
+  .card { background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 18px; margin: 12px 0; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .row.between { justify-content: space-between; }
+  .pill { display: inline-block; font-size: 12px; padding: 2px 8px;
+    border: 1px solid var(--border); border-radius: 999px; color: var(--muted);
+    background: white; margin-right: 4px; }
+  .pill.warn { color: var(--warn); border-color: var(--warn); }
+  .pill.good { color: var(--good); border-color: var(--good); }
+  .pill.bad { color: var(--bad); border-color: var(--bad); }
+  .pill.accent { color: var(--accent); border-color: var(--accent); }
+  .progressbar { height: 6px; background: var(--border); border-radius: 3px;
+    overflow: hidden; flex: 1; min-width: 120px; }
+  .progressbar > div { height: 100%; background: var(--accent); width: 0%; transition: width 0.2s; }
+  .qhead { display: flex; justify-content: space-between; align-items: baseline;
+    gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .qnum { font-weight: 600; color: var(--accent); }
+  .stem { margin: 6px 0 14px; }
+  .stem img { max-width: 100%; height: auto; display: block; margin: 12px 0;
+    border: 1px solid var(--border); border-radius: 6px; background: white; padding: 6px; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 8px; cursor: pointer;
+    background: white; transition: background 0.1s; }
+  .opt:hover { background: var(--hover); }
+  .opt.selected { background: #dbeafe; border-color: var(--accent); }
+  .opt.correct { background: #dcfce7; border-color: var(--good); }
+  .opt.wrong { background: #fee2e2; border-color: var(--bad); }
+  .opt.reveal-correct { background: #dcfce7; border-color: var(--good); }
+  .opt .letter { font-weight: 600; min-width: 18px; }
+  .feedback { margin-top: 10px; padding: 10px 12px; border-radius: 8px; font-size: 14.5px; }
+  .feedback.good { background: #dcfce7; border: 1px solid var(--good); color: #14532d; }
+  .feedback.bad { background: #fee2e2; border: 1px solid var(--bad); color: #7f1d1d; }
+  .small { font-size: 13px; color: var(--muted); }
+  .right { text-align: right; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; }
+  .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px; background: #f3f4f6; padding: 1px 6px; border-radius: 4px;
+    border: 1px solid var(--border); }
+  .errbox { background: #fee2e2; border: 1px solid var(--bad); color: #7f1d1d;
+    padding: 10px 12px; border-radius: 8px; margin: 10px 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+  /* Modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center; z-index: 1000; }
+  .modal-box { background: white; border-radius: 10px; padding: 20px 22px;
+    max-width: 460px; width: 92%; box-shadow: 0 10px 40px rgba(0,0,0,0.2); max-height: 88vh; overflow-y: auto; }
+  .modal-box h2 { margin-top: 0; }
+  .modal-box input[type="password"], .modal-box input[type="text"], .modal-box input[type="date"],
+  .modal-box textarea {
+    width: 100%; padding: 9px 11px; font: inherit; border: 1px solid var(--border);
+    border-radius: 6px; margin-top: 6px; }
+  .modal-box .row { margin-top: 12px; justify-content: flex-end; }
+  /* Header bits */
+  .profile-tag { font-size: 13px; color: var(--muted); }
+  .profile-tag b { color: var(--fg); }
+  /* Timer */
+  .timerbar { display: flex; align-items: center; gap: 12px;
+    background: white; border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 12px; margin-bottom: 10px; }
+  .clock { font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 16px; font-weight: 600; }
+  .pace-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .pace-dot.green { background: var(--good); }
+  .pace-dot.yellow { background: var(--pace-yellow); }
+  .pace-dot.red { background: var(--bad); }
+  /* Star, marks */
+  .star-btn { background: transparent; border: none; cursor: pointer;
+    font-size: 20px; line-height: 1; padding: 0 4px; color: #d1d5db; }
+  .star-btn.starred { color: #f59e0b; }
+  .star-btn:hover { color: #f59e0b; }
+  /* Chat */
+  .chat-panel { background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px;
+    padding: 12px; margin-top: 10px; }
+  .chat-context { background: #fef3c7; border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; font-size: 13px; }
+  .chat-context summary { cursor: pointer; font-weight: 600; }
+  .chat-msgs { max-height: 360px; overflow-y: auto; padding: 6px 2px; }
+  .chat-msg { padding: 8px 10px; border-radius: 8px; margin: 4px 0; }
+  .chat-msg.user { background: #dbeafe; margin-left: 24px; }
+  .chat-msg.assistant { background: white; border: 1px solid #fcd34d; margin-right: 24px; }
+  .chat-msg .who { font-size: 11px; color: var(--muted); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .chat-input { width: 100%; min-height: 56px; padding: 8px 10px; border: 1px solid var(--border);
+    border-radius: 6px; font: inherit; resize: vertical; }
+  /* Heatmap */
+  .heatmap { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 6px; }
+  .heatcell { padding: 10px 10px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--border); color: white; font-size: 13px; line-height: 1.25; }
+  .heatcell.untested { background: #e5e7eb; color: var(--muted); }
+  .heatcell .acc { font-weight: 600; font-size: 15px; }
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .tab { padding: 8px 12px; cursor: pointer; border: 1px solid transparent;
+    border-bottom: none; border-radius: 6px 6px 0 0; font-size: 14px; color: var(--muted); }
+  .tab.active { background: white; border-color: var(--border); color: var(--fg); font-weight: 600; }
+  /* Notes textarea inside question card */
+  .note-area { width: 100%; min-height: 50px; padding: 6px 8px; border: 1px solid var(--border);
+    border-radius: 6px; font: inherit; margin-top: 4px; font-size: 13.5px; }
+  /* Insight card */
+  .insight { background: #eef2ff; border: 1px solid #c7d2fe; padding: 10px 12px;
+    border-radius: 8px; color: #312e81; }
+  /* Generated mini-quiz */
+  .gen-q { border-left: 3px solid var(--accent); padding: 8px 10px; margin: 8px 0; background: white; border-radius: 4px; }
+  .gen-q.correct { border-left-color: var(--good); background: #f0fdf4; }
+  .gen-q.wrong { border-left-color: var(--bad); background: #fef2f2; }
+  /* Test-day */
+  .countdown { font-size: 28px; font-weight: 700; color: var(--accent); }
+  .checklist li { margin: 4px 0; }
+  /* Heatmap detail list */
+  .qsublist { list-style: none; padding: 0; margin: 0; }
+  .qsublist li { padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; margin: 4px 0; background: white; }
+  .qsublist li .qmeta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  /* Toast (F2 report-error confirmation) */
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #1f2937; color: white; padding: 10px 16px; border-radius: 8px;
+    font-size: 14px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); z-index: 1100; }
+  .toast.bad { background: var(--bad); }
+  /* Topic-filter chips (F1) */
+  .topic-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+  .topic-chip { font-size: 12px; padding: 4px 9px; border: 1px solid var(--border);
+    border-radius: 999px; cursor: pointer; background: white; color: var(--muted); user-select: none; }
+  .topic-chip.selected { background: var(--accent); color: white; border-color: var(--accent); }
+  .topic-chip.allchip { font-weight: 600; }
+  /* Report-error button on question card */
+  .report-btn { font-size: 12px; padding: 3px 8px; color: var(--muted); background: transparent;
+    border: 1px solid var(--border); border-radius: 4px; cursor: pointer; }
+  .report-btn:hover { color: var(--bad); border-color: var(--bad); }
+  /* Pause overlay (F5) */
+  .paused-dim { opacity: 0.35; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<!-- Netlify Forms hidden form for F2 question-error reporting.
+     The build crawler picks this up so submissions are accepted.
+     Steve must enable Forms notifications in the Netlify dashboard
+     to receive emails at sthubbar@gmail.com. -->
+<form name="question-error" netlify netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="question-error" />
+  <input type="text" name="bot-field" />
+  <input type="text" name="qid" />
+  <input type="text" name="profile" />
+  <input type="text" name="type" />
+  <textarea name="description"></textarea>
+  <input type="text" name="userAgent" />
+</form>
+
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>GRE Math Subject Test, adaptive practice</h1>
+    <div class="sub">Phase 2: profiles, chat tutor, timed modes, heatmap, patterns.</div>
+  </div>
+  <div class="profile-tag" id="profile-tag"></div>
+</header>
+
+<div id="app"></div>
+
+</div>
+
+<script>
+"use strict"; /*PROBE_EDIT_VERIFY_2*/
+
+// ==========================================================================
+// localStorage schema (all values JSON-stringified unless noted otherwise).
+// "<profile>" is the active profile name (default "kai", per-profile data).
+// "<qid>" is a question id like "GR3768-Q1".
+// ==========================================================================
+//   gre.profiles                                -> array of profile objects [{name, created}, ...]
+//   gre.active_profile                          -> string profile name (last selected)
+//   gre_app_password                            -> string (raw, NOT JSON), tutor password
+//
+//   profile:<profile>:history                   -> { qid: {attempts, correct, streak, bucket, leitnerBox, lastSeen, lastResult, nextReview} }
+//   profile:<profile>:log                       -> array of attempts [{qid, ts, mode, chosen, correct, time_sec}]
+//   profile:<profile>:sessions                  -> array of completed session summaries
+//   profile:<profile>:settings                  -> object {length: N}
+//   profile:<profile>:bookmarks                 -> { qid: {starred:bool, note:string} }
+//   profile:<profile>:rules                     -> { ruleId: {id,text,qid,box,lastSeen,lastResult} }
+//   profile:<profile>:patterns                  -> array [{ts, insight, sinceTs}] (rolling, recent first, capped)
+//   profile:<profile>:patterns_history          -> array [{ts, insight}] (F6, full history capped 50)
+//   profile:<profile>:testday                   -> ISO date string for target test day
+//   profile:<profile>:session.current           -> object, in-progress session (resume)
+//   profile:<profile>:topic_filter              -> array of canonical topic strings (F1, last-used)
+//   profile:<profile>:custom_mode               -> object {length:N, minutes:M} (F5, last custom mock)
+//   profile:<profile>:chat:<qid>                -> array of chat messages [{role, content, ts?}], capped 30 (F4)
+// ==========================================================================
+
+// ==========================================================================
+// Configuration
+// ==========================================================================
+const QUESTIONS_URL = "questions.json";
+const TUTOR_URL = "/.netlify/functions/tutor";
+const HEALTH_URL = "/.netlify/functions/health";
+const GENERATE_URL = "/.netlify/functions/generate";
+const PATTERN_URL = "/.netlify/functions/pattern";
+
+const LEITNER_INTERVALS_DAYS = [1, 3, 7, 14, 30];
+const MASTERY_STREAK = 3;
+const MIX_TARGETS = { learning: 0.60, review: 0.30, new: 0.10 };
+
+// Rule-recall Leitner.
+const RULE_BOX_MAX = 5;
+
+// Pattern detection trigger.
+const PATTERN_THRESHOLD = 30;
+const PATTERN_KEEP = 5;
+
+// ETS scaled-score lookup (approximation, raw correct out of 66 -> scaled).
+// Reused/extended from Phase 1.
+const ETS_SCALE = [
+  [0,200],[5,400],[10,500],[15,560],[20,610],[25,650],[30,690],
+  [33,710],[36,730],[39,750],[42,770],[45,790],[48,810],[51,830],
+  [54,850],[57,870],[60,890],[63,910],[66,930]
+];
+
+// Modes.
+const MODES = {
+  practice: { label: "Practice (untimed)", timed: false, length: null },
+  sprint:   { label: "Sprint",  timed: true,  length: 10, minutes: 25 },
+  quarter:  { label: "Quarter", timed: true,  length: 17, minutes: 42 },
+  mock:     { label: "Mock",    timed: true,  length: 66, minutes: 170 },
+};
+
+// Canonical topic taxonomy (must match generator and questions.json).
+const CANONICAL_TOPICS = [
+  "calculus","linear_algebra","real_analysis","abstract_algebra","complex_analysis",
+  "topology","discrete_math","probability","number_theory","differential_equations",
+  "geometry","foundations_logic","numerical_methods","algorithms_combinatorics",
+  "statistics","precalculus_trig",
+];
+
+// ==========================================================================
+// Profile-aware localStorage
+// ==========================================================================
+const LS_GLOBAL_PROFILES = "gre.profiles";   // [{name, created}]
+const LS_GLOBAL_ACTIVE = "gre.active_profile";
+const LS_GLOBAL_PASSWORD = "gre_app_password";
+
+function lsLoad(key, fallback) {
+  try { const r = localStorage.getItem(key); return r ? JSON.parse(r) : fallback; }
+  catch (e) { return fallback; }
+}
+function lsSave(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+}
+
+function profileKey(suffix) {
+  return "profile:" + (STATE.activeProfile || "kai") + ":" + suffix;
+}
+
+// ==========================================================================
+// State
+// ==========================================================================
+const STATE = {
+  questions: [],
+  byId: {},
+  activeProfile: "kai",
+  history: {},          // qid -> {attempts, correct, streak, bucket, leitnerBox, lastSeen, lastResult, nextReview}
+  log: [],              // [{qid, ts, mode, chosen, correct, time_sec}]
+  sessions: [],         // completed sessions
+  settings: { length: 20 },
+  bookmarks: {},        // qid -> {starred:bool, note:string}
+  rules: {},            // ruleId -> {text, qid, box, lastSeen, lastResult}
+  patterns: [],         // [{ts, insight}] (recent surfaced patterns, capped at PATTERN_KEEP)
+  patternsHistory: [],  // F6: [{ts, insight}] full history, capped 50
+  testDay: null,        // ISO date string
+  currentSession: null, // saved partial session (resume)
+  ruleQuiz: null,       // active rule recall quiz
+  topicFilter: [],      // F1: array of selected canonical topic strings (empty = all topics)
+  customMode: { length: 30, minutes: 80 }, // F5: last custom mock settings
+  // ephemeral chat-tutor state per question, in memory only is fine because chat is also persisted to LS.
+};
+
+// F6: cap on patterns history list.
+const PATTERNS_HISTORY_KEEP = 50;
+// F4: cap on stored chat messages per question.
+const CHAT_HISTORY_KEEP = 30;
+
+// ==========================================================================
+// Utilities
+// ==========================================================================
+function $el(tag, props = {}, children = []) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(props || {})) {
+    if (v == null) continue;
+    if (k === "class") e.className = v;
+    else if (k === "html") e.innerHTML = v;
+    else if (k === "text") e.textContent = v;
+    else if (k.startsWith("on") && typeof v === "function") {
+      e.addEventListener(k.slice(2).toLowerCase(), v);
+    } else {
+      e.setAttribute(k, v);
+    }
+  }
+  for (const c of (children || [])) {
+    if (c == null) continue;
+    e.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+  }
+  return e;
+}
+function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+function nowIso() { return new Date().toISOString(); }
+function dayMs(n) { return n * 24 * 60 * 60 * 1000; }
+function shuffleInPlace(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+function todayISODate() { return new Date().toISOString().slice(0, 10); }
+function fmtMMSS(sec) {
+  if (sec == null || isNaN(sec)) return "--:--";
+  sec = Math.max(0, Math.floor(sec));
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+}
+function escapeHTML(s) {
+  return (s || "").toString()
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+// safeMathHTML: split text on KaTeX math delimiters ($$...$$, $...$, \(...\), \[...\]).
+// Math segments are passed through verbatim so KaTeX auto-render can process them.
+// Non-math segments get HTML-escaped so user-typed "<" in choice text does not get
+// parsed as the start of an HTML tag. Whitelisted simple tags (br, b, i, sup, sub,
+// em, strong) are allowed because the question bank uses them (e.g. GR3768-Q36, Q64).
+function safeMathHTML(s) {
+  if (s == null) return "";
+  s = s.toString();
+  // Tokenize math segments. Order matters: try $$ before $, and \[ before \(.
+  const re = /(\$\$[\s\S]*?\$\$|\\\[[\s\S]*?\\\]|\\\([\s\S]*?\\\)|\$[^\$\n]*?\$)/g;
+  const parts = [];
+  let lastIdx = 0;
+  let m;
+  while ((m = re.exec(s)) !== null) {
+    if (m.index > lastIdx) parts.push({ math: false, text: s.slice(lastIdx, m.index) });
+    parts.push({ math: true, text: m[0] });
+    lastIdx = m.index + m[0].length;
+  }
+  if (lastIdx < s.length) parts.push({ math: false, text: s.slice(lastIdx) });
+
+  const out = [];
+  for (const p of parts) {
+    if (p.math) {
+      // Math segments: ALSO escape HTML entities. The browser decodes
+      // &lt;/&gt;/&amp; back into <,>,& in the text node, and KaTeX auto-render
+      // then parses the math correctly. Without this escape, raw "<" inside
+      // \(0<x<2\) gets eaten by the HTML parser before KaTeX sees it.
+      out.push(
+        p.text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+      );
+    } else {
+      // Non-math: escape, then restore whitelisted tags.
+      let t = p.text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      // Restore safe tags: <br>, <br/>, <br />, <b>, </b>, <i>, </i>, <sup>, </sup>,
+      // <sub>, </sub>, <em>, </em>, <strong>, </strong>.
+      t = t.replace(/&lt;(\/?)(br|b|i|sup|sub|em|strong)(\s*\/?)&gt;/gi, "<$1$2$3>");
+      out.push(t);
+    }
+  }
+  return out.join("");
+}
+
+function renderMath(node) {
+  if (window.renderMathInElement) {
+    window.renderMathInElement(node, {
+      delimiters: [
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true },
+        { left: "$$", right: "$$", display: true },
+        { left: "$", right: "$", display: false },
+      ],
+      throwOnError: false,
+      strict: false,
+    });
+  }
+}
+
+// Accuracy fraction (0-1) -> ETS scaled score via the same table.
+function accuracyToScore(p) {
+  if (typeof p !== "number" || isNaN(p)) return null;
+  const c = Math.round(Math.max(0, Math.min(1, p)) * 66);
+  return etsScaledScore(c, 66);
+}
+
+// ETS scale lookup, linear interp.
+function etsScaledScore(correct, total) {
+  if (!total) return null;
+  const proportional = (correct / total) * 66;
+  for (let i = 0; i < ETS_SCALE.length - 1; i++) {
+    const [r1, s1] = ETS_SCALE[i];
+    const [r2, s2] = ETS_SCALE[i + 1];
+    if (proportional >= r1 && proportional <= r2) {
+      const t = (proportional - r1) / (r2 - r1);
+      return Math.round(s1 + t * (s2 - s1));
+    }
+  }
+  return ETS_SCALE[ETS_SCALE.length - 1][1];
+}
+
+// ==========================================================================
+// Profile management
+// ==========================================================================
+function getProfiles() {
+  let list = lsLoad(LS_GLOBAL_PROFILES, null);
+  if (!list || !Array.isArray(list) || list.length === 0) {
+    list = [{ name: "kai", created: nowIso() }, { name: "steve", created: nowIso() }];
+    lsSave(LS_GLOBAL_PROFILES, list);
+  }
+  return list;
+}
+function setActiveProfile(name) {
+  STATE.activeProfile = name;
+  lsSave(LS_GLOBAL_ACTIVE, name);
+  loadProfileData();
+  updateHeader();
+}
+function addProfile(name) {
+  name = (name || "").toString().trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "");
+  if (!name) return null;
+  const list = getProfiles();
+  if (list.find(p => p.name === name)) return name;
+  list.push({ name, created: nowIso() });
+  lsSave(LS_GLOBAL_PROFILES, list);
+  return name;
+}
+function loadProfileData() {
+  STATE.history = lsLoad(profileKey("history"), {});
+  STATE.log = lsLoad(profileKey("log"), []);
+  STATE.sessions = lsLoad(profileKey("sessions"), []);
+  STATE.settings = Object.assign({ length: 20 }, lsLoad(profileKey("settings"), {}));
+  STATE.bookmarks = lsLoad(profileKey("bookmarks"), {});
+  STATE.rules = lsLoad(profileKey("rules"), {});
+  STATE.patterns = lsLoad(profileKey("patterns"), []);
+  STATE.patternsHistory = lsLoad(profileKey("patterns_history"), []);
+  STATE.testDay = lsLoad(profileKey("testday"), null);
+  STATE.currentSession = lsLoad(profileKey("session.current"), null);
+  STATE.topicFilter = lsLoad(profileKey("topic_filter"), []);
+  STATE.customMode = Object.assign({ length: 30, minutes: 80 }, lsLoad(profileKey("custom_mode"), {}));
+}
+function saveAll() {
+  lsSave(profileKey("history"), STATE.history);
+  lsSave(profileKey("log"), STATE.log);
+  lsSave(profileKey("sessions"), STATE.sessions);
+  lsSave(profileKey("settings"), STATE.settings);
+  lsSave(profileKey("bookmarks"), STATE.bookmarks);
+  lsSave(profileKey("rules"), STATE.rules);
+  lsSave(profileKey("patterns"), STATE.patterns);
+  lsSave(profileKey("patterns_history"), STATE.patternsHistory);
+  lsSave(profileKey("testday"), STATE.testDay);
+  lsSave(profileKey("topic_filter"), STATE.topicFilter);
+  lsSave(profileKey("custom_mode"), STATE.customMode);
+}
+function persistSession() {
+  lsSave(profileKey("session.current"), STATE.currentSession);
+}
+
+// Per-question chat conversations stored separately to keep main blobs small.
+// F4: persisted across sessions, capped at CHAT_HISTORY_KEEP most recent messages.
+function loadChat(qid) {
+  return lsLoad(profileKey("chat:" + qid), []);
+}
+function saveChat(qid, messages) {
+  // Cap at most-recent CHAT_HISTORY_KEEP entries to avoid runaway growth.
+  let toSave = messages || [];
+  if (toSave.length > CHAT_HISTORY_KEEP) toSave = toSave.slice(-CHAT_HISTORY_KEEP);
+  lsSave(profileKey("chat:" + qid), toSave);
+}
+function clearChat(qid) {
+  try { localStorage.removeItem(profileKey("chat:" + qid)); } catch (e) {}
+}
+
+// F2: tiny toast notifier for non-blocking feedback.
+function showToast(message, ms, kind) {
+  const t = $el("div", { class: "toast" + (kind === "bad" ? " bad" : ""), text: message });
+  document.body.appendChild(t);
+  setTimeout(() => { try { document.body.removeChild(t); } catch (e) {} }, ms || 2400);
+}
+
+// F2: report-error modal.
+// Submits to Netlify Forms via standard urlencoded POST. The hidden form
+// at the top of the page is what Netlify's build step picks up. Steve must
+// enable Forms notifications in the Netlify dashboard to receive emails.
+async function openReportErrorModal(qid) {
+  const wrap = $el("div");
+  wrap.appendChild($el("div", { class: "small",
+    text: "Report a problem with question " + qid + ". Steve will see this." }));
+
+  const typeRow = $el("div", { style: "margin-top: 10px;" });
+  typeRow.appendChild($el("div", { class: "small", text: "Type:" }));
+  const typeSel = $el("select", { style: "width: 100%; padding: 8px;" });
+  for (const [val, label] of [
+    ["parsing", "parsing problem"],
+    ["wrong_answer", "wrong answer"],
+    ["missing_image", "missing image"],
+    ["other", "other"],
+  ]) {
+    typeSel.appendChild($el("option", { value: val, text: label }));
+  }
+  typeRow.appendChild(typeSel);
+  wrap.appendChild(typeRow);
+
+  const descWrap = $el("div", { style: "margin-top: 10px;" });
+  descWrap.appendChild($el("div", { class: "small", text: "Description (one line):" }));
+  const descInp = $el("input", { type: "text", placeholder: "what's wrong?", maxlength: "300" });
+  descWrap.appendChild(descInp);
+  wrap.appendChild(descWrap);
+
+  const choice = await showModal("Report error: " + qid, wrap, [
+    { label: "Cancel", value: null },
+    { label: "Submit", value: "submit", primary: true },
+  ]);
+  if (choice !== "submit") return;
+
+  const description = (descInp.value || "").trim();
+  const type = typeSel.value || "other";
+  const body = new URLSearchParams({
+    "form-name": "question-error",
+    "qid": qid,
+    "profile": STATE.activeProfile || "",
+    "type": type,
+    "description": description,
+    "userAgent": (navigator && navigator.userAgent) || "",
+  }).toString();
+  try {
+    const resp = await fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+    });
+    if (resp.ok || resp.status === 200 || resp.status === 303) {
+      showToast("Reported. Thanks.");
+    } else {
+      showToast("Submit failed (" + resp.status + ")", 3500, "bad");
+    }
+  } catch (e) {
+    showToast("Submit failed: " + (e && e.message ? e.message : "network"), 3500, "bad");
+  }
+}
+
+// ==========================================================================
+// Password gate
+// ==========================================================================
+function getPassword() { return localStorage.getItem(LS_GLOBAL_PASSWORD) || ""; }
+function setPassword(p) { localStorage.setItem(LS_GLOBAL_PASSWORD, p); }
+function clearPassword() { localStorage.removeItem(LS_GLOBAL_PASSWORD); }
+
+function showPasswordModal(reason) {
+  return new Promise((resolve) => {
+    const overlay = $el("div", { class: "modal-overlay" });
+    const box = $el("div", { class: "modal-box" });
+    box.appendChild($el("h2", { text: "Enter access password" }));
+    box.appendChild($el("div", { class: "small",
+      text: reason || "One-time gate so the tutor stays within budget. Ask Steve for the password.",
+      style: "margin-bottom: 6px;" }));
+    const input = $el("input", { type: "password", placeholder: "password", autofocus: "true" });
+    box.appendChild(input);
+    const row = $el("div", { class: "row" });
+    const submit = $el("button", { class: "primary", text: "Submit",
+      onclick: () => {
+        const v = input.value.trim();
+        if (!v) return;
+        setPassword(v);
+        document.body.removeChild(overlay);
+        resolve(v);
+      },
+    });
+    row.appendChild(submit);
+    box.appendChild(row);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    input.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter") { ev.preventDefault(); submit.click(); }
+    });
+    setTimeout(() => input.focus(), 30);
+  });
+}
+
+// ==========================================================================
+// Generic modal
+// ==========================================================================
+function showModal(title, contentNode, buttons) {
+  return new Promise((resolve) => {
+    const overlay = $el("div", { class: "modal-overlay" });
+    const box = $el("div", { class: "modal-box" });
+    box.appendChild($el("h2", { text: title }));
+    box.appendChild(contentNode);
+    const row = $el("div", { class: "row" });
+    for (const b of (buttons || [{ label: "Close", value: null }])) {
+      const btn = $el("button", {
+        class: b.primary ? "primary" : (b.danger ? "danger" : ""),
+        text: b.label,
+        onclick: () => { document.body.removeChild(overlay); resolve(b.value); },
+      });
+      row.appendChild(btn);
+    }
+    box.appendChild(row);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+  });
+}
+
+// ==========================================================================
+// History
+// ==========================================================================
+function defaultHistory(qid) {
+  return {
+    id: qid, attempts: 0, correct: 0, streak: 0,
+    bucket: "new", leitnerBox: 1, lastSeen: null, lastResult: null,
+    nextReview: nowIso(),
+  };
+}
+function getH(qid) {
+  if (!STATE.history[qid]) STATE.history[qid] = defaultHistory(qid);
+  return STATE.history[qid];
+}
+function recordAttempt(qid, chosenIdx, correct, mode, timeSec) {
+  const h = getH(qid);
+  h.attempts += 1;
+  h.lastSeen = nowIso();
+  h.lastResult = correct ? "correct" : "wrong";
+  if (correct) {
+    h.correct += 1;
+    h.streak += 1;
+    if (h.bucket !== "mastered") {
+      if (h.streak >= MASTERY_STREAK) {
+        h.bucket = "mastered";
+        h.nextReview = null;
+      } else {
+        h.bucket = "learning";
+        h.leitnerBox = Math.min(h.leitnerBox + 1, LEITNER_INTERVALS_DAYS.length);
+        const days = LEITNER_INTERVALS_DAYS[h.leitnerBox - 1];
+        h.nextReview = new Date(Date.now() + dayMs(days)).toISOString();
+      }
+    }
+  } else {
+    h.streak = 0;
+    h.bucket = "learning";
+    h.leitnerBox = 1;
+    h.nextReview = new Date(Date.now() + dayMs(LEITNER_INTERVALS_DAYS[0])).toISOString();
+  }
+  STATE.log.push({ qid, ts: nowIso(), mode, chosen: chosenIdx, correct: !!correct, time_sec: timeSec });
+  saveAll();
+}
+
+function classify(qid) {
+  const h = STATE.history[qid];
+  if (!h || h.attempts === 0) return "new";
+  if (h.bucket === "mastered") return "mastered";
+  if (h.bucket === "learning" && h.nextReview && new Date(h.nextReview) <= new Date()) return "review_due";
+  return "learning_not_due";
+}
+// Only "active" questions are eligible for selection or counts. Anything with a
+// different status (e.g. "retired") is filtered out everywhere upstream.
+function isActiveQ(q) {
+  return q && (q.status == null || q.status === "active");
+}
+function activeQuestions() {
+  return STATE.questions.filter(isActiveQ);
+}
+
+// F1: question matches the current topic filter? Empty filter = all questions match.
+function matchesTopicFilter(q, filterArr) {
+  const f = filterArr || STATE.topicFilter || [];
+  if (!f || f.length === 0) return true;
+  const t = q.topics || [];
+  for (const sel of f) { if (t.includes(sel)) return true; }
+  return false;
+}
+// Active questions, optionally further restricted to the topic filter.
+function filteredActiveQuestions(filterArr) {
+  return activeQuestions().filter(q => matchesTopicFilter(q, filterArr));
+}
+function bucketCounts() {
+  const out = { new: 0, review_due: 0, learning_not_due: 0, mastered: 0 };
+  for (const q of activeQuestions()) out[classify(q.id)] += 1;
+  return out;
+}
+
+function selectAdaptive(length) {
+  const buckets = { new: [], review_due: [], learning_not_due: [], mastered: [] };
+  for (const q of filteredActiveQuestions()) buckets[classify(q.id)].push(q.id);
+  for (const k of Object.keys(buckets)) shuffleInPlace(buckets[k]);
+  const want = {
+    learning: Math.round(length * MIX_TARGETS.learning),
+    review:   Math.round(length * MIX_TARGETS.review),
+    new:      length - Math.round(length * MIX_TARGETS.learning) - Math.round(length * MIX_TARGETS.review),
+  };
+  const picked = []; const seen = new Set();
+  function take(pool, n) {
+    while (n > 0 && pool.length > 0) {
+      const id = pool.shift();
+      if (seen.has(id)) continue;
+      seen.add(id); picked.push(id); n--;
+    }
+  }
+  take(buckets.review_due, want.review);
+  take(buckets.learning_not_due, want.learning);
+  take(buckets.new, want.new);
+  if (picked.length < length) {
+    const fill = [...buckets.review_due, ...buckets.learning_not_due, ...buckets.new];
+    take(fill, length - picked.length);
+  }
+  if (picked.length < length) take(buckets.mastered, length - picked.length);
+  shuffleInPlace(picked);
+  return picked;
+}
+function selectRandom(length) {
+  const ids = filteredActiveQuestions().map(q => q.id);
+  shuffleInPlace(ids);
+  return ids.slice(0, length);
+}
+
+// Bookmarked-question selector. Active + topic-filter + currently-starred only.
+function selectBookmarks(length) {
+  const starred = new Set(
+    Object.entries(STATE.bookmarks || {})
+      .filter(([_, v]) => v && v.starred)
+      .map(([qid, _]) => qid)
+  );
+  const ids = filteredActiveQuestions()
+    .filter(q => starred.has(q.id))
+    .map(q => q.id);
+  shuffleInPlace(ids);
+  return ids.slice(0, Math.min(length, ids.length));
+}
+function bookmarkedActiveCount() {
+  const starred = new Set(
+    Object.entries(STATE.bookmarks || {})
+      .filter(([_, v]) => v && v.starred)
+      .map(([qid, _]) => qid)
+  );
+  return filteredActiveQuestions().filter(q => starred.has(q.id)).length;
+}
+
+// Final-week mode prioritizes weak topics.
+function selectFinalWeek(length) {
+  // accuracy per topic
+  const topicAcc = computeTopicAccuracy();
+  const weakOrder = Object.entries(topicAcc)
+    .sort((a, b) => (a[1].acc ?? 1) - (b[1].acc ?? 1))
+    .map(([t]) => t);
+  const picked = []; const seen = new Set();
+  const pool = filteredActiveQuestions();
+  for (const t of weakOrder) {
+    for (const q of pool) {
+      if (seen.has(q.id)) continue;
+      if ((q.topics || []).includes(t)) { seen.add(q.id); picked.push(q.id); }
+      if (picked.length >= length) break;
+    }
+    if (picked.length >= length) break;
+  }
+  if (picked.length < length) {
+    for (const q of pool) {
+      if (seen.has(q.id)) continue;
+      seen.add(q.id); picked.push(q.id);
+      if (picked.length >= length) break;
+    }
+  }
+  return picked.slice(0, length);
+}
+
+// ==========================================================================
+// Topic accuracy / heatmap data
+// ==========================================================================
+function computeTopicAccuracy() {
+  const out = {};
+  for (const t of CANONICAL_TOPICS) out[t] = { attempts: 0, correct: 0, qids: new Set() };
+  for (const q of STATE.questions) {
+    for (const t of (q.topics || [])) {
+      if (!out[t]) out[t] = { attempts: 0, correct: 0, qids: new Set() };
+      out[t].qids.add(q.id);
+    }
+  }
+  for (const e of STATE.log) {
+    const q = STATE.byId[e.qid];
+    if (!q) continue;
+    for (const t of (q.topics || [])) {
+      if (!out[t]) continue;
+      out[t].attempts += 1;
+      if (e.correct) out[t].correct += 1;
+    }
+  }
+  for (const t of Object.keys(out)) {
+    const v = out[t];
+    v.acc = v.attempts ? v.correct / v.attempts : null;
+    v.bankSize = v.qids.size;
+    delete v.qids;
+  }
+  return out;
+}
+
+// ==========================================================================
+// Rule extraction (from tutor replies)
+// ==========================================================================
+function extractRule(text) {
+  if (!text) return null;
+  const m = text.match(/(?:^|\n)\s*Rule:\s*([^\n]+)/i);
+  if (m) return m[1].trim();
+  // Fallback: last sentence if it looks rule-like.
+  const sentences = text.trim().split(/(?<=[.!?])\s+/);
+  const last = sentences[sentences.length - 1] || "";
+  if (last.toLowerCase().startsWith("rule:")) return last.replace(/^rule:\s*/i, "").trim();
+  return null;
+}
+function recordRule(qid, ruleText) {
+  if (!ruleText) return;
+  const key = qid + "::" + ruleText.slice(0, 80);
+  if (!STATE.rules[key]) {
+    STATE.rules[key] = { id: key, text: ruleText, qid, box: 1, lastSeen: nowIso(), lastResult: null };
+  } else {
+    STATE.rules[key].text = ruleText;
+    STATE.rules[key].lastSeen = nowIso();
+  }
+  saveAll();
+}
+
+// ==========================================================================
+// Wrong-answer pattern detection
+// ==========================================================================
+async function maybeRunPatternDetection() {
+  const wrongs = STATE.log.filter(e => !e.correct);
+  // Determine count since last detection.
+  const lastDetectedTs = STATE.patterns.length ? STATE.patterns[0].sinceTs : null;
+  const newWrongs = lastDetectedTs ? wrongs.filter(e => e.ts > lastDetectedTs) : wrongs;
+  if (newWrongs.length < PATTERN_THRESHOLD) return;
+
+  const window = newWrongs.slice(-PATTERN_THRESHOLD);
+  const misses = window.map(e => {
+    const q = STATE.byId[e.qid];
+    if (!q) return null;
+    return {
+      question: (q.stem || "").slice(0, 240),
+      chosen: q.options[e.chosen] || "",
+      correct: q.options[q.answer] || "",
+      topic: (q.topics || []).join("/"),
+    };
+  }).filter(Boolean);
+
+  let pw = getPassword();
+  if (!pw) return;
+  try {
+    const resp = await fetch(PATTERN_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ misses, password: pw }),
+    });
+    if (!resp.ok) return;
+    const j = await resp.json();
+    if (!j.insight) return;
+    const tsNow = nowIso();
+    STATE.patterns.unshift({ ts: tsNow, insight: j.insight, sinceTs: window[window.length - 1].ts });
+    if (STATE.patterns.length > PATTERN_KEEP) STATE.patterns = STATE.patterns.slice(0, PATTERN_KEEP);
+    // F6: also append to full history (capped 50, recent first).
+    if (!Array.isArray(STATE.patternsHistory)) STATE.patternsHistory = [];
+    STATE.patternsHistory.unshift({ ts: tsNow, insight: j.insight });
+    if (STATE.patternsHistory.length > PATTERNS_HISTORY_KEEP) {
+      STATE.patternsHistory = STATE.patternsHistory.slice(0, PATTERNS_HISTORY_KEEP);
+    }
+    saveAll();
+  } catch (e) { /* best-effort */ }
+}
+
+// ==========================================================================
+// Header
+// ==========================================================================
+function updateHeader() {
+  const tag = document.getElementById("profile-tag");
+  if (!tag) return;
+  clear(tag);
+  tag.appendChild($el("span", { html: `Profile: <b>${escapeHTML(STATE.activeProfile)}</b>` }));
+  const switchBtn = $el("button", {
+    class: "ghost", text: "switch",
+    style: "margin-left: 8px;",
+    onclick: () => promptSwitchProfile(),
+  });
+  tag.appendChild(switchBtn);
+}
+
+async function promptSwitchProfile() {
+  const list = getProfiles();
+  const wrapper = $el("div");
+  wrapper.appendChild($el("div", { class: "small", text: "Choose a profile.", style: "margin-bottom: 8px;" }));
+  const sel = $el("select", { style: "width: 100%; padding: 8px;" });
+  for (const p of list) {
+    const o = $el("option", { value: p.name, text: p.name });
+    if (p.name === STATE.activeProfile) o.selected = "selected";
+    sel.appendChild(o);
+  }
+  wrapper.appendChild(sel);
+  const newBox = $el("div", { style: "margin-top: 8px;" });
+  newBox.appendChild($el("div", { class: "small", text: "Or add a new profile:" }));
+  const newInput = $el("input", { type: "text", placeholder: "name (lowercase)" });
+  newBox.appendChild(newInput);
+  wrapper.appendChild(newBox);
+
+  const choice = await showModal("Switch profile", wrapper, [
+    { label: "Add new", value: "add" },
+    { label: "Cancel", value: null },
+    { label: "Switch", value: "switch", primary: true },
+  ]);
+  if (choice === "add") {
+    const newName = addProfile(newInput.value);
+    if (newName) {
+      if (!confirm("Switch to '" + newName + "' now?")) return;
+      setActiveProfile(newName);
+      renderHome();
+    }
+  } else if (choice === "switch") {
+    const name = sel.value;
+    if (name && name !== STATE.activeProfile) {
+      if (STATE.currentSession && !confirm("You have a session in progress. Switching will keep it but you can only resume it as " + STATE.activeProfile + ". Continue switching?")) return;
+      setActiveProfile(name);
+      renderHome();
+    }
+  }
+}
+
+// ==========================================================================
+// Home / mode picker
+// ==========================================================================
+const APP = document.getElementById("app");
+
+function renderHome() {
+  STATE.ruleQuiz = null;
+  clear(APP);
+
+  // Resume banner.
+  if (STATE.currentSession && !STATE.currentSession.completed) {
+    const sess = STATE.currentSession;
+    const remaining = sess.length - sess.idx;
+    const card = $el("div", { class: "card" });
+    card.appendChild($el("h2", { text: "Resume your session" }));
+    let line = `Mode: <b>${escapeHTML(sess.mode)}</b>. ${sess.idx} of ${sess.length} done, ${remaining} remaining.`;
+    if (sess.timed && sess.endsAt) {
+      const left = Math.max(0, Math.floor((new Date(sess.endsAt).getTime() - Date.now()) / 1000));
+      line += ` Time left: <b>${fmtMMSS(left)}</b>.`;
+    }
+    card.appendChild($el("div", { html: line }));
+    const row = $el("div", { class: "row", style: "margin-top: 10px;" });
+    row.appendChild($el("button", { class: "primary", text: "Resume", onclick: () => resumeSession() }));
+    row.appendChild($el("button", { text: "Restart this mode", onclick: () => {
+      const m = sess.mode; STATE.currentSession = null; persistSession(); startSession(m);
+    }}));
+    row.appendChild($el("button", { class: "ghost", text: "Discard", onclick: () => {
+      if (!confirm("Discard the in-progress session?")) return;
+      STATE.currentSession = null; persistSession(); renderHome();
+    }}));
+    card.appendChild(row);
+    APP.appendChild(card);
+  }
+
+  // Test-day countdown / final-week banner.
+  if (STATE.testDay) {
+    const days = daysToTest();
+    const card = $el("div", { class: "card" });
+    card.appendChild($el("h2", { text: "Test day" }));
+    if (days >= 0) {
+      card.appendChild($el("div", { class: "countdown", text: `${days} day${days === 1 ? "" : "s"}` }));
+      card.appendChild($el("div", { class: "small", text: `Target: ${STATE.testDay}` }));
+      if (days <= 14) card.appendChild($el("div", { class: "pill warn", text: "Final-week mode active. Practice will surface weak topics." }));
+    } else {
+      card.appendChild($el("div", { class: "small", text: `Target ${STATE.testDay} has passed.` }));
+    }
+    APP.appendChild(card);
+  }
+
+  // Mode picker.
+  const modeCard = $el("div", { class: "card" });
+  modeCard.appendChild($el("h2", { text: "Start a session" }));
+  const grid = $el("div", { class: "row" });
+  for (const m of Object.keys(MODES)) {
+    const cfg = MODES[m];
+    const sub = cfg.timed ? `${cfg.length}Q, ${cfg.minutes}min` : "untimed";
+    const b = $el("button", {
+      class: "primary",
+      onclick: () => startSession(m),
+      style: "min-width: 130px; padding: 10px 12px; margin: 4px 4px 4px 0;",
+    });
+    b.innerHTML = `<div style="font-weight:600;">${cfg.label}</div><div style="font-size:12px;opacity:0.85;">${sub}</div>`;
+    grid.appendChild(b);
+  }
+  // F5: Custom mock button.
+  const customBtn = $el("button", {
+    class: "primary",
+    onclick: () => promptStartCustomMock(),
+    style: "min-width: 130px; padding: 10px 12px; margin: 4px 4px 4px 0; background: #7c3aed; border-color: #7c3aed;",
+  });
+  customBtn.innerHTML = `<div style="font-weight:600;">Custom</div><div style="font-size:12px;opacity:0.85;">choose N, M</div>`;
+  grid.appendChild(customBtn);
+
+  // Practice bookmarks button. Only enabled if there is at least one starred bookmark in the active pool.
+  const bmCount = bookmarkedActiveCount();
+  if (bmCount > 0) {
+    const bmBtn = $el("button", {
+      class: "primary",
+      onclick: () => startSession("bookmarks"),
+      style: "min-width: 130px; padding: 10px 12px; margin: 4px 4px 4px 0; background: #f59e0b; border-color: #f59e0b;",
+    });
+    const cap = Math.min(bmCount, 20);
+    bmBtn.innerHTML = `<div style="font-weight:600;">Practice bookmarks</div><div style="font-size:12px;opacity:0.85;">${cap} of ${bmCount} starred</div>`;
+    grid.appendChild(bmBtn);
+  } else {
+    const bmHint = $el("div", {
+      class: "small",
+      style: "margin: 8px 0 0 4px; opacity: 0.7;",
+      text: "No bookmarks yet",
+    });
+    grid.appendChild(bmHint);
+  }
+
+  modeCard.appendChild(grid);
+
+  // Length & mode picker for Practice.
+  const practiceRow = $el("div", { class: "row", style: "margin-top: 10px;" });
+  practiceRow.appendChild($el("span", { class: "small", text: "Practice length: " }));
+  for (const n of [10, 20, 30, 50]) {
+    const b = $el("button", {
+      class: STATE.settings.length === n ? "primary" : "",
+      text: String(n),
+      onclick: () => { STATE.settings.length = n; saveAll(); renderHome(); },
+    });
+    practiceRow.appendChild(b);
+  }
+  modeCard.appendChild(practiceRow);
+
+  // F1: topic filter chips.
+  modeCard.appendChild(renderTopicFilter());
+
+  const bc = bucketCounts();
+  const status = $el("div", { class: "small", style: "margin-top: 12px;" });
+  const activeCount = activeQuestions().length;
+  const filteredCount = filteredActiveQuestions().length;
+  const filterNote = (STATE.topicFilter && STATE.topicFilter.length > 0)
+    ? ` Filtered pool: <strong>${filteredCount}</strong>.`
+    : "";
+  status.innerHTML =
+    `Bank: <strong>${activeCount}</strong> questions.${filterNote} ` +
+    `<span class="pill">new: ${bc.new}</span>` +
+    `<span class="pill warn">due: ${bc.review_due}</span>` +
+    `<span class="pill">learning: ${bc.learning_not_due}</span>` +
+    `<span class="pill good">mastered: ${bc.mastered}</span>`;
+  modeCard.appendChild(status);
+  APP.appendChild(modeCard);
+
+  // Dashboard / tabs.
+  const dashCard = $el("div", { class: "card" });
+  dashCard.appendChild($el("h2", { text: "Dashboard" }));
+  dashCard.appendChild(renderDashboardTabs());
+  APP.appendChild(dashCard);
+
+  // My notes.
+  APP.appendChild(renderMyNotesCard());
+
+  // Mastery browser.
+  APP.appendChild(renderMasteryBrowserCard());
+
+  // F6: patterns history card.
+  APP.appendChild(renderPatternsHistoryCard());
+
+  // Tutor health.
+  const proxy = $el("div", { class: "card" });
+  proxy.appendChild($el("h2", { text: "Tutor service" }));
+  const proxyMsg = $el("div", { class: "small", text: "Checking..." });
+  proxy.appendChild(proxyMsg);
+  fetch(HEALTH_URL, { method: "GET" })
+    .then(r => r.ok ? r.json() : Promise.reject(r.statusText))
+    .then(j => {
+      proxyMsg.innerHTML = `Tutor <span class="pill good">up</span>. Phase ${j.phase || "?"}. Model: <code>${j.model || "(unknown)"}</code>. Functions: ${(j.functions || []).join(", ")}.`;
+    })
+    .catch(() => { proxyMsg.innerHTML = `Tutor <span class="pill bad">unreachable</span>. The tutor button may not work.`; });
+  APP.appendChild(proxy);
+
+  const help = $el("div", { class: "card" });
+  help.appendChild($el("h2", { text: "Keys" }));
+  help.appendChild($el("div", { class: "small", html:
+    `<span class="kbd">1</span>-<span class="kbd">5</span> select option, ` +
+    `<span class="kbd">Enter</span> confirm or next, ` +
+    `<span class="kbd">T</span> open chat tutor on a wrong answer, ` +
+    `<span class="kbd">M</span> mark for review, ` +
+    `<span class="kbd">S</span> star bookmark, ` +
+    `<span class="kbd">N</span> note.`
+  }));
+  APP.appendChild(help);
+
+  updateHeader();
+}
+
+// ==========================================================================
+// One-question review session (entry point used by Notes view and Mastery browser)
+// ==========================================================================
+function startSingleQuestionReview(qid) {
+  const q = STATE.byId[qid];
+  if (!q) { alert("Question " + qid + " not found."); return; }
+  const session = {
+    mode: "review",
+    timed: false,
+    minutes: null,
+    length: 1,
+    ids: [qid],
+    idx: 0,
+    answers: {},
+    confirmed: {},
+    marked: {},
+    chats: {},
+    questionStartTs: nowIso(),
+    startedAt: nowIso(),
+    endsAt: null,
+    completed: false,
+  };
+  STATE.currentSession = session;
+  persistSession();
+  renderQuestion();
+}
+
+// ==========================================================================
+// My notes (home screen card)
+// ==========================================================================
+// Notes-card collapse key. Default collapsed (per Steve 2026-05-08).
+function notesCollapsedKey() { return profileKey("ui.notes_collapsed"); }
+function isNotesCollapsed() {
+  const v = lsLoad(notesCollapsedKey(), null);
+  return v === null ? true : !!v;
+}
+function setNotesCollapsed(b) { lsSave(notesCollapsedKey(), !!b); }
+
+function renderMyNotesCard() {
+  const card = $el("div", { class: "card" });
+  const entries = Object.entries(STATE.bookmarks || {})
+    .filter(([qid, v]) => v && typeof v.note === "string" && v.note.trim().length > 0);
+  const collapsed = isNotesCollapsed();
+  const headerBtn = $el("button", {
+    class: "ghost",
+    style: "width: 100%; text-align: left; font-weight: 600; font-size: 16px;",
+    text: (collapsed ? "> " : "v ") + "My notes (" + entries.length + ")",
+    onclick: () => { setNotesCollapsed(!collapsed); renderHome(); },
+  });
+  card.appendChild(headerBtn);
+  if (collapsed) return card;
+
+  if (entries.length === 0) {
+    card.appendChild($el("div", { class: "small", style: "margin-top: 8px;",
+      text: "No notes yet. Notes you write during practice will show up here." }));
+    return card;
+  }
+  // Sort by qid for stability.
+  entries.sort((a, b) => (a[0] < b[0] ? -1 : (a[0] > b[0] ? 1 : 0)));
+  const ul = $el("ul", { class: "qsublist", style: "margin-top: 8px;" });
+  for (const [qid, v] of entries) {
+    const li = $el("li");
+    const trimmed = v.note.trim();
+    const shown = trimmed.length > 120 ? trimmed.slice(0, 120) + "..." : trimmed;
+    li.innerHTML = `<b>${escapeHTML(qid)}</b><div class="qmeta" style="margin-top:4px;">${escapeHTML(shown)}</div>`;
+    const btn = $el("button", {
+      class: "ghost", text: "Jump to question",
+      style: "margin-top:6px;",
+      onclick: () => startSingleQuestionReview(qid),
+    });
+    li.appendChild(btn);
+    ul.appendChild(li);
+  }
+  card.appendChild(ul);
+  return card;
+}
+
+// ==========================================================================
+// Browse by mastery bucket (home screen card)
+// ==========================================================================
+const MASTERY_BROWSE_OPEN = { new: true, learning: true, mastered: false };
+function renderMasteryBrowserCard() {
+  const card = $el("div", { class: "card" });
+  card.appendChild($el("h2", { text: "Questions by mastery" }));
+
+  // Build the three groups from active questions only.
+  const groups = { new: [], learning: [], mastered: [] };
+  for (const q of activeQuestions()) {
+    const cls = classify(q.id);
+    if (cls === "mastered") groups.mastered.push(q.id);
+    else if (cls === "new") groups.new.push(q.id);
+    else groups.learning.push(q.id); // review_due + learning_not_due
+  }
+  for (const k of Object.keys(groups)) groups[k].sort();
+
+  const labels = { new: "New", learning: "Learning", mastered: "Mastered" };
+  for (const k of ["new", "learning", "mastered"]) {
+    const ids = groups[k];
+    const wrap = $el("div", { style: "margin-top: 8px;" });
+    const headerBtn = $el("button", {
+      class: "ghost",
+      style: "width: 100%; text-align: left;",
+      text: (MASTERY_BROWSE_OPEN[k] ? "v " : "> ") + labels[k] + " (" + ids.length + ")",
+      onclick: () => { MASTERY_BROWSE_OPEN[k] = !MASTERY_BROWSE_OPEN[k]; renderHome(); },
+    });
+    wrap.appendChild(headerBtn);
+    if (MASTERY_BROWSE_OPEN[k]) {
+      if (ids.length === 0) {
+        wrap.appendChild($el("div", { class: "small", style: "margin-top: 6px;", text: "(none)" }));
+      } else {
+        const row = $el("div", { class: "row", style: "margin-top: 6px; gap: 6px;" });
+        for (const id of ids) {
+          row.appendChild($el("button", {
+            text: id,
+            onclick: () => startSingleQuestionReview(id),
+            style: "padding: 4px 8px;",
+          }));
+        }
+        wrap.appendChild(row);
+      }
+    }
+    card.appendChild(wrap);
+  }
+  return card;
+}
+
+// ==========================================================================
+// F1: Topic-filter chip control
+// ==========================================================================
+function renderTopicFilter() {
+  const wrap = $el("div", { style: "margin-top: 12px;" });
+  const lbl = $el("div", { class: "small" });
+  lbl.innerHTML = "Topic filter: " +
+    (STATE.topicFilter && STATE.topicFilter.length > 0
+      ? `<b>${STATE.topicFilter.length}</b> selected (sessions restricted)`
+      : "<b>All topics</b> (no filter)");
+  wrap.appendChild(lbl);
+
+  const chips = $el("div", { class: "topic-chips" });
+  // "All topics" chip clears the filter.
+  const allChip = $el("div", {
+    class: "topic-chip allchip" + ((!STATE.topicFilter || STATE.topicFilter.length === 0) ? " selected" : ""),
+    text: "All topics",
+    onclick: () => { STATE.topicFilter = []; saveAll(); renderHome(); },
+  });
+  chips.appendChild(allChip);
+  for (const t of CANONICAL_TOPICS) {
+    const sel = (STATE.topicFilter || []).includes(t);
+    const chip = $el("div", {
+      class: "topic-chip" + (sel ? " selected" : ""),
+      text: t,
+      onclick: () => {
+        const f = (STATE.topicFilter || []).slice();
+        const idx = f.indexOf(t);
+        if (idx >= 0) f.splice(idx, 1); else f.push(t);
+        STATE.topicFilter = f;
+        saveAll();
+        renderHome();
+      },
+    });
+    chips.appendChild(chip);
+  }
+  wrap.appendChild(chips);
+  return wrap;
+}
+
+// ==========================================================================
+// F5: Custom-length mock prompt
+// ==========================================================================
+async function promptStartCustomMock() {
+  const wrap = $el("div");
+  wrap.appendChild($el("div", { class: "small", text: "Configure a custom timed session." }));
+  const lenWrap = $el("div", { style: "margin-top: 8px;" });
+  lenWrap.appendChild($el("div", { class: "small", text: "Number of questions:" }));
+  const lenInp = $el("input", { type: "text", value: String(STATE.customMode.length || 30) });
+  lenWrap.appendChild(lenInp);
+  wrap.appendChild(lenWrap);
+
+  const minWrap = $el("div", { style: "margin-top: 8px;" });
+  minWrap.appendChild($el("div", { class: "small", text: "Minutes:" }));
+  const minInp = $el("input", { type: "text", value: String(STATE.customMode.minutes || 80) });
+  minWrap.appendChild(minInp);
+  wrap.appendChild(minWrap);
+
+  const choice = await showModal("Custom mock", wrap, [
+    { label: "Cancel", value: null },
+    { label: "Start", value: "start", primary: true },
+  ]);
+  if (choice !== "start") return;
+  const length = Math.max(1, parseInt(lenInp.value, 10) || 0);
+  const minutes = Math.max(1, parseInt(minInp.value, 10) || 0);
+  if (!length || !minutes) { alert("Enter positive integers for both fields."); return; }
+  STATE.customMode = { length, minutes };
+  saveAll();
+  startSession("custom", { length, minutes });
+}
+
+// ==========================================================================
+// F3: One-question topic drill (used by heatmap cell click)
+// ==========================================================================
+function startTopicSession(topic, length) {
+  // Build a small adaptive-style pool for this topic, using the standard selector
+  // with the topic filter temporarily set to just this topic.
+  const prevFilter = STATE.topicFilter ? STATE.topicFilter.slice() : [];
+  STATE.topicFilter = [topic];
+  let ids = selectAdaptive(length || 5);
+  // Restore prior filter (the user's persistent choice should not be overwritten).
+  STATE.topicFilter = prevFilter;
+  saveAll();
+  if (!ids || ids.length === 0) {
+    alert("No questions found for topic: " + topic);
+    return;
+  }
+  if (ids.length === 1) { startSingleQuestionReview(ids[0]); return; }
+  const session = {
+    mode: "topic-drill:" + topic,
+    timed: false,
+    minutes: null,
+    length: ids.length,
+    ids,
+    idx: 0,
+    answers: {},
+    confirmed: {},
+    marked: {},
+    chats: {},
+    questionStartTs: nowIso(),
+    startedAt: nowIso(),
+    endsAt: null,
+    completed: false,
+    pausedAt: null,
+    totalPausedMs: 0,
+  };
+  STATE.currentSession = session;
+  persistSession();
+  renderQuestion();
+}
+
+// ==========================================================================
+// F6: Patterns history home-screen card
+// ==========================================================================
+function renderPatternsHistoryCard() {
+  const card = $el("div", { class: "card" });
+  card.appendChild($el("h2", { text: "Patterns history" }));
+  const list = STATE.patternsHistory || [];
+  if (list.length === 0) {
+    card.appendChild($el("div", { class: "small",
+      text: `Patterns appear after every ${PATTERN_THRESHOLD} wrong answers in this profile. None surfaced yet.` }));
+    return card;
+  }
+  card.appendChild($el("div", { class: "small",
+    text: `${list.length} pattern${list.length === 1 ? "" : "s"} surfaced (most recent first; capped at ${PATTERNS_HISTORY_KEEP}).` }));
+  const ul = $el("ul", { class: "qsublist", style: "margin-top: 6px;" });
+  for (const p of list) {
+    const li = $el("li");
+    const ts = (p.ts || "").slice(0, 10);
+    li.innerHTML = `<div class="qmeta"><b>${escapeHTML(ts)}</b></div>` +
+      `<div style="margin-top:4px;">${escapeHTML(p.insight || "")}</div>`;
+    ul.appendChild(li);
+  }
+  card.appendChild(ul);
+  return card;
+}
+
+// ==========================================================================
+// Dashboard tabs
+// ==========================================================================
+let activeDashTab = "overview";
+function renderDashboardTabs() {
+  const wrap = $el("div");
+  const tabBar = $el("div", { class: "tabs" });
+  const tabs = ["overview", "topics", "rules", "patterns", "bookmarks", "history"];
+  for (const t of tabs) {
+    const tabEl = $el("div", { class: "tab" + (activeDashTab === t ? " active" : ""), text: t });
+    tabEl.addEventListener("click", () => { activeDashTab = t; renderHome(); });
+    tabBar.appendChild(tabEl);
+  }
+  wrap.appendChild(tabBar);
+  const body = $el("div");
+  if (activeDashTab === "overview") body.appendChild(renderOverview());
+  else if (activeDashTab === "topics") body.appendChild(renderTopicsHeatmap());
+  else if (activeDashTab === "rules") body.appendChild(renderRulesTab());
+  else if (activeDashTab === "patterns") body.appendChild(renderPatternsTab());
+  else if (activeDashTab === "bookmarks") body.appendChild(renderBookmarksTab());
+  else if (activeDashTab === "history") body.appendChild(renderHistoryTab());
+  wrap.appendChild(body);
+  return wrap;
+}
+
+function renderOverview() {
+  const w = $el("div");
+  const total = STATE.log.length;
+  const correct = STATE.log.filter(e => e.correct).length;
+  const wrong = total - correct;
+  const ratio = total ? (100 * correct / total).toFixed(1) : "--";
+  const streak = computeStreak();
+  const days = computeDaysPracticed();
+  const hours = computeHoursEstimate();
+
+  w.appendChild($el("div", { class: "grid2", html:
+    `<div>Total answered:</div><div><b>${total}</b></div>` +
+    `<div>Correct:</div><div><b>${correct}</b> (${ratio}%)</div>` +
+    `<div>Incorrect:</div><div><b>${wrong}</b></div>` +
+    `<div>Current streak:</div><div><b>${streak}</b> right in a row</div>` +
+    `<div>Days practiced:</div><div><b>${days}</b></div>` +
+    `<div>Hours estimate:</div><div><b>${hours.toFixed(1)}</b></div>`
+  }));
+
+  // Test day.
+  w.appendChild($el("hr"));
+  const td = $el("div", { class: "row between" });
+  td.appendChild($el("div", { html: STATE.testDay
+    ? `Target test date: <b>${STATE.testDay}</b> (${daysToTest()} day${daysToTest() === 1 ? "" : "s"})`
+    : `No target test date set.`
+  }));
+  td.appendChild($el("button", { text: "Set", onclick: () => promptSetTestDay() }));
+  w.appendChild(td);
+
+  if (STATE.testDay && daysToTest() <= 14 && daysToTest() >= 0) {
+    w.appendChild($el("hr"));
+    w.appendChild($el("h3", { text: "Final-week checklist" }));
+    const ul = $el("ul", { class: "checklist" });
+    for (const item of [
+      "Two full Mock tests this week (different days).",
+      "Drill the bottom-2 weakest topics on the heatmap each day.",
+      "Review starred questions and notes.",
+      "Sleep 8 hours the night before.",
+      "Bring photo ID, admission ticket, water, snack.",
+    ]) ul.appendChild($el("li", { text: item }));
+    w.appendChild(ul);
+  }
+
+  // ETS-equivalent score trend, via inline canvas + Chart.js lazy load.
+  if (STATE.sessions.length > 0) {
+    w.appendChild($el("hr"));
+    w.appendChild($el("h3", { text: "Estimated GRE score (Bayesian, 90% band)" }));
+    const canvas = $el("canvas", { id: "trendChart", height: "240" });
+    canvas.style.maxHeight = "280px";
+    w.appendChild(canvas);
+    setTimeout(() => drawTrendChart(canvas), 50);
+  }
+  return w;
+}
+
+function computeStreak() {
+  let s = 0;
+  for (let i = STATE.log.length - 1; i >= 0; i--) {
+    if (STATE.log[i].correct) s++; else break;
+  }
+  return s;
+}
+function computeDaysPracticed() {
+  const days = new Set();
+  for (const e of STATE.log) days.add(e.ts.slice(0, 10));
+  return days.size;
+}
+function computeHoursEstimate() {
+  // Sum session durations if available; else 1 minute per attempt rough fallback.
+  let totalSec = 0;
+  for (const s of STATE.sessions) {
+    if (s.startedAt && s.endedAt) {
+      totalSec += (new Date(s.endedAt).getTime() - new Date(s.startedAt).getTime()) / 1000;
+    } else {
+      totalSec += (s.answered || 0) * 90;
+    }
+  }
+  return totalSec / 3600;
+}
+function daysToTest() {
+  if (!STATE.testDay) return null;
+  const t = new Date(STATE.testDay + "T00:00:00").getTime();
+  const now = Date.now();
+  return Math.ceil((t - now) / dayMs(1));
+}
+
+async function promptSetTestDay() {
+  const wrap = $el("div");
+  const inp = $el("input", { type: "date", value: STATE.testDay || "" });
+  wrap.appendChild($el("div", { class: "small", text: "Pick your target test date." }));
+  wrap.appendChild(inp);
+  const choice = await showModal("Target test date", wrap, [
+    { label: "Clear", value: "clear", danger: true },
+    { label: "Cancel", value: null },
+    { label: "Save", value: "save", primary: true },
+  ]);
+  if (choice === "save" && inp.value) {
+    STATE.testDay = inp.value;
+    saveAll();
+    renderHome();
+  } else if (choice === "clear") {
+    STATE.testDay = null; saveAll(); renderHome();
+  }
+}
+
+// Lazy-load Chart.js once.
+let chartJsLoading = null;
+function ensureChartJs() {
+  if (window.Chart) return Promise.resolve();
+  if (chartJsLoading) return chartJsLoading;
+  chartJsLoading = new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js";
+    s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+  return chartJsLoading;
+}
+
+async function drawTrendChart(canvas) {
+  // Bayesian posterior estimate of accuracy, mapped to GRE scaled score.
+  // For each session boundary we compute Beta(alpha, beta) posterior over the
+  // user's underlying accuracy, using all attempts to date with exponential
+  // decay (recent attempts weighted more). Shows the posterior mean as a thick
+  // line plus a 90% credible-interval band that narrows as N grows.
+  // Per-session correct/wrong counts are stacked bars on a secondary axis.
+  await ensureChartJs();
+  const sessions = STATE.sessions || [];
+  if (sessions.length === 0) return;
+
+  const LAMBDA = 0.985;         // per-attempt decay, ~70-attempt effective window
+  const PRIOR_ALPHA = 2;        // prior pseudo-counts
+  const PRIOR_BETA = 2;
+
+  let softC = 0, softN = 0;
+  const points = [];
+  for (const s of sessions) {
+    const cnt = s.answered || 0;
+    if (cnt === 0) continue;
+    const c = s.correct || 0;
+    const w = (typeof s.wrong === "number") ? s.wrong : (cnt - c);
+    const decay = Math.pow(LAMBDA, cnt);
+    softC *= decay;
+    softN *= decay;
+    softC += c;
+    softN += cnt;
+    const alpha = PRIOR_ALPHA + softC;
+    const beta = PRIOR_BETA + (softN - softC);
+    const mu = alpha / (alpha + beta);
+    const sigma = Math.sqrt(alpha * beta / (Math.pow(alpha + beta, 2) * (alpha + beta + 1)));
+    const lo = Math.max(0, mu - 1.645 * sigma);
+    const hi = Math.min(1, mu + 1.645 * sigma);
+    points.push({
+      label: (s.endedAt || s.startedAt || "").slice(0, 10),
+      attempted: cnt, correct: c, wrong: w,
+      muScore: accuracyToScore(mu),
+      loScore: accuracyToScore(lo),
+      hiScore: accuracyToScore(hi),
+    });
+  }
+  if (points.length === 0) return;
+
+  const labels = points.map((p, i) => `S${i + 1}`);
+  if (canvas._chart) canvas._chart.destroy();
+  canvas._chart = new Chart(canvas, {
+    data: {
+      labels,
+      datasets: [
+        // Lower bound (invisible line; serves as the fill anchor).
+        {
+          type: "line", label: "Lower 90%",
+          data: points.map(p => p.loScore),
+          borderColor: "rgba(37, 99, 235, 0)",
+          pointRadius: 0, yAxisID: "yScore",
+        },
+        // Upper bound; fills back to previous dataset (the lower bound).
+        {
+          type: "line", label: "Upper 90%",
+          data: points.map(p => p.hiScore),
+          borderColor: "rgba(37, 99, 235, 0)",
+          backgroundColor: "rgba(37, 99, 235, 0.15)",
+          fill: "-1", pointRadius: 0, yAxisID: "yScore",
+        },
+        // Middle estimate (thick line).
+        {
+          type: "line", label: "Estimated GRE score",
+          data: points.map(p => p.muScore),
+          borderColor: "#2563eb", backgroundColor: "#2563eb",
+          borderWidth: 3, tension: 0.25, pointRadius: 3,
+          yAxisID: "yScore",
+        },
+        // Per-session bars: correct + wrong, stacked, on right axis.
+        {
+          type: "bar", label: "Correct",
+          data: points.map(p => p.correct),
+          backgroundColor: "rgba(34, 197, 94, 0.7)",
+          stack: "session", yAxisID: "yCount",
+        },
+        {
+          type: "bar", label: "Wrong",
+          data: points.map(p => p.wrong),
+          backgroundColor: "rgba(239, 68, 68, 0.7)",
+          stack: "session", yAxisID: "yCount",
+        },
+      ],
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      scales: {
+        yScore: { type: "linear", position: "left",
+          suggestedMin: 400, suggestedMax: 990,
+          title: { display: true, text: "Estimated GRE score" },
+        },
+        yCount: { type: "linear", position: "right",
+          beginAtZero: true, grid: { display: false },
+          title: { display: true, text: "Questions per session" },
+        },
+      },
+      plugins: {
+        legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11 },
+          filter: (item) => item.text !== "Lower 90%" && item.text !== "Upper 90%" } },
+        tooltip: {
+          callbacks: {
+            afterBody: (items) => {
+              if (!items || items.length === 0) return "";
+              const p = points[items[0].dataIndex];
+              return `${p.attempted} questions on ${p.label}\n90% band: ${p.loScore} to ${p.hiScore}`;
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
+function renderTopicsHeatmap() {
+  const w = $el("div");
+  const acc = computeTopicAccuracy();
+  const grid = $el("div", { class: "heatmap" });
+  for (const t of CANONICAL_TOPICS) {
+    const v = acc[t];
+    const cell = $el("div", { class: "heatcell" });
+    if (!v || v.attempts === 0) {
+      cell.classList.add("untested");
+      cell.innerHTML = `<div>${t}</div><div class="acc">untested</div><div style="font-size:11px;">${v ? v.bankSize : 0} in bank</div>`;
+    } else {
+      const a = v.acc;
+      // red->yellow->green
+      let bg;
+      if (a < 0.5) bg = `hsl(${Math.round(a * 80)}, 70%, 45%)`;
+      else if (a < 0.8) bg = `hsl(${Math.round(45 + a * 40)}, 65%, 42%)`;
+      else bg = `hsl(${Math.round(120 + (a - 0.8) * 30)}, 65%, 38%)`;
+      cell.style.background = bg;
+      cell.innerHTML = `<div>${t}</div><div class="acc">${Math.round(a * 100)}%</div><div style="font-size:11px;">${v.correct}/${v.attempts} on ${v.bankSize}</div>`;
+    }
+    cell.addEventListener("click", () => drillTopic(t));
+    grid.appendChild(cell);
+  }
+  w.appendChild(grid);
+  return w;
+}
+
+async function drillTopic(topic) {
+  const wrap = $el("div");
+  // F3: action row to start a focused session right from the heatmap.
+  const actionRow = $el("div", { class: "row", style: "margin-bottom: 10px;" });
+  actionRow.appendChild($el("button", {
+    class: "primary", text: "Start 5-question drill",
+    onclick: () => {
+      // Close the modal then start the session.
+      const overlay = document.querySelector(".modal-overlay");
+      if (overlay) document.body.removeChild(overlay);
+      startTopicSession(topic, 5);
+    },
+  }));
+  actionRow.appendChild($el("button", {
+    text: "1-question drill",
+    onclick: () => {
+      const overlay = document.querySelector(".modal-overlay");
+      if (overlay) document.body.removeChild(overlay);
+      startTopicSession(topic, 1);
+    },
+  }));
+  wrap.appendChild(actionRow);
+
+  wrap.appendChild($el("div", { class: "small", text: `${topic}: questions in bank.` }));
+  const ul = $el("ul", { class: "qsublist" });
+  for (const q of STATE.questions) {
+    if (!(q.topics || []).includes(topic)) continue;
+    const h = STATE.history[q.id] || { attempts: 0, correct: 0, bucket: "new" };
+    const li = $el("li");
+    li.innerHTML = `<b>${q.id}</b> <span class="pill">${h.bucket}</span> ` +
+      `<span class="pill">${h.correct}/${h.attempts}</span><div class="qmeta">` +
+      escapeHTML((q.stem || "").slice(0, 180)) + "...</div>";
+    ul.appendChild(li);
+  }
+  wrap.appendChild(ul);
+  showModal("Topic: " + topic, wrap, [{ label: "Close", value: null, primary: true }]);
+}
+
+function renderRulesTab() {
+  const w = $el("div");
+  const rules = Object.values(STATE.rules);
+  if (rules.length === 0) {
+    w.appendChild($el("div", { class: "small", text: "No rules yet. Wrong answers + tutor chat will populate this list." }));
+    return w;
+  }
+  const row = $el("div", { class: "row", style: "margin-bottom: 8px;" });
+  row.appendChild($el("button", { class: "primary", text: "Rule Recall mini-quiz", onclick: () => startRuleQuiz() }));
+  row.appendChild($el("span", { class: "small", text: ` ${rules.length} rule${rules.length === 1 ? "" : "s"} learned.` }));
+  w.appendChild(row);
+  const ul = $el("ul", { class: "qsublist" });
+  for (const r of rules.sort((a, b) => (b.lastSeen || "").localeCompare(a.lastSeen || ""))) {
+    const li = $el("li");
+    li.innerHTML = `<span class="pill">box ${r.box}</span> <b>${escapeHTML(r.qid)}</b><div class="qmeta">` +
+      escapeHTML(r.text) + "</div>";
+    ul.appendChild(li);
+  }
+  w.appendChild(ul);
+  return w;
+}
+
+function startRuleQuiz() {
+  const all = Object.values(STATE.rules);
+  if (all.length < 4) { alert("Need at least 4 rules learned for the recall mini-quiz."); return; }
+  // Pick lowest-box first as the target.
+  all.sort((a, b) => a.box - b.box);
+  const target = all[0];
+  const distractors = all.filter(r => r.id !== target.id);
+  shuffleInPlace(distractors);
+  const opts = [target, distractors[0], distractors[1], distractors[2]];
+  shuffleInPlace(opts);
+  STATE.ruleQuiz = { target, opts };
+  renderRuleQuizModal();
+}
+
+function renderRuleQuizModal() {
+  const { target, opts } = STATE.ruleQuiz;
+  const q = STATE.byId[target.qid] || { stem: "(question not in current bank)" };
+  const wrap = $el("div");
+  wrap.appendChild($el("div", { class: "small", html: `Original question:<br><i>${escapeHTML((q.stem || "").slice(0, 200))}</i>` }));
+  wrap.appendChild($el("div", { style: "margin-top: 8px; font-weight: 600;", text: "What rule did you learn?" }));
+  const list = $el("div", { class: "options", style: "margin-top: 6px;" });
+  opts.forEach((o, i) => {
+    const div = $el("div", { class: "opt" });
+    div.appendChild($el("span", { class: "letter", text: ["A","B","C","D"][i] }));
+    div.appendChild($el("span", { text: o.text }));
+    div.addEventListener("click", () => answerRuleQuiz(o.id === target.id, target));
+    list.appendChild(div);
+  });
+  wrap.appendChild(list);
+  showModal("Rule Recall", wrap, [{ label: "Close", value: null }]).then(() => { STATE.ruleQuiz = null; });
+}
+
+function answerRuleQuiz(correct, target) {
+  if (correct) target.box = Math.min(target.box + 1, RULE_BOX_MAX);
+  else target.box = 1;
+  target.lastSeen = nowIso();
+  target.lastResult = correct ? "correct" : "wrong";
+  saveAll();
+  // Close any open modal.
+  const overlay = document.querySelector(".modal-overlay");
+  if (overlay) document.body.removeChild(overlay);
+  alert(correct ? "Correct. Box up." : "Not quite. Back to box 1.");
+  renderHome();
+}
+
+function renderPatternsTab() {
+  const w = $el("div");
+  if (STATE.patterns.length === 0) {
+    w.appendChild($el("div", { class: "small",
+      text: `Patterns appear after every ${PATTERN_THRESHOLD} wrong answers in this profile.` }));
+    return w;
+  }
+  for (const p of STATE.patterns) {
+    const card = $el("div", { class: "insight", style: "margin-bottom: 8px;" });
+    card.innerHTML = `<div class="small">${p.ts.slice(0, 10)}</div><div>${escapeHTML(p.insight)}</div>`;
+    w.appendChild(card);
+  }
+  return w;
+}
+
+function renderBookmarksTab() {
+  const w = $el("div");
+  const starred = Object.entries(STATE.bookmarks).filter(([_, v]) => v && v.starred);
+  if (starred.length === 0) {
+    w.appendChild($el("div", { class: "small", text: "No bookmarks. Press the star on any question." }));
+    return w;
+  }
+  const ul = $el("ul", { class: "qsublist" });
+  for (const [qid, v] of starred) {
+    const q = STATE.byId[qid];
+    if (!q) continue;
+    const li = $el("li");
+    li.innerHTML = `<b>${qid}</b> <span class="pill">${(q.topics || []).join(", ")}</span>` +
+      `<div class="qmeta">${escapeHTML((q.stem || "").slice(0, 160))}</div>` +
+      (v.note ? `<div class="qmeta" style="margin-top:4px;"><b>note:</b> ${escapeHTML(v.note)}</div>` : "");
+    ul.appendChild(li);
+  }
+  w.appendChild(ul);
+  return w;
+}
+
+function renderHistoryTab() {
+  const w = $el("div");
+  if (STATE.sessions.length === 0) {
+    w.appendChild($el("div", { class: "small", text: "No sessions yet." }));
+    return w;
+  }
+  const ul = $el("ul", { class: "qsublist" });
+  for (const s of STATE.sessions.slice().reverse().slice(0, 30)) {
+    const score = etsScaledScore(s.correct || 0, s.answered || 1);
+    const li = $el("li");
+    li.innerHTML = `<b>${s.startedAt.slice(0, 10)}</b> <span class="pill">${escapeHTML(s.mode)}</span> ` +
+      `${s.correct || 0}/${s.answered || 0} <span class="pill accent">ETS ${score}</span>`;
+    ul.appendChild(li);
+  }
+  w.appendChild(ul);
+  return w;
+}
+
+// ==========================================================================
+// Session
+// ==========================================================================
+function startSession(modeKey, customCfg) {
+  // F5: "custom" mode supplies {length, minutes} via customCfg.
+  let cfg;
+  if (modeKey === "custom" && customCfg) {
+    cfg = { label: "Custom", timed: true, length: customCfg.length, minutes: customCfg.minutes };
+  } else if (modeKey === "bookmarks") {
+    cfg = { label: "Bookmarks", timed: false, length: null };
+  } else {
+    cfg = MODES[modeKey] || MODES.practice;
+  }
+  const length = cfg.length || STATE.settings.length || 20;
+
+  let ids;
+  if (modeKey === "bookmarks") {
+    // Bookmark session: untimed, capped at 20.
+    ids = selectBookmarks(20);
+    if (ids.length === 0) {
+      APP.appendChild($el("div", { class: "errbox",
+        text: "No bookmarked questions match the current topic filter." }));
+      return;
+    }
+  } else if (STATE.testDay && daysToTest() != null && daysToTest() <= 14 && daysToTest() >= 0 && modeKey !== "mock" && modeKey !== "custom") {
+    // Final-week takes precedence on weak-topic prioritization for non-mock modes.
+    ids = selectFinalWeek(length);
+  } else if (modeKey === "mock" || modeKey === "custom") {
+    ids = selectRandom(length);
+  } else {
+    ids = selectAdaptive(length);
+  }
+  if (ids.length === 0) {
+    APP.appendChild($el("div", { class: "errbox",
+      text: "No questions available. Try clearing the topic filter." }));
+    return;
+  }
+
+  const session = {
+    mode: modeKey,
+    timed: !!cfg.timed,
+    minutes: cfg.minutes || null,
+    length: ids.length,
+    ids,
+    idx: 0,
+    answers: {},
+    confirmed: {},
+    marked: {},          // qid -> bool
+    chats: {},           // qid -> [{role, content}]
+    questionStartTs: nowIso(),
+    startedAt: nowIso(),
+    endsAt: cfg.timed ? new Date(Date.now() + cfg.minutes * 60 * 1000).toISOString() : null,
+    completed: false,
+    // F5: pause tracking. pausedAt = ISO timestamp while paused, else null. totalPausedMs accumulates.
+    pausedAt: null,
+    totalPausedMs: 0,
+  };
+  STATE.currentSession = session;
+  persistSession();
+  renderQuestion();
+}
+
+function resumeSession() {
+  // Pick up exactly where left off.
+  if (!STATE.currentSession) { renderHome(); return; }
+  // For timed sessions, if endsAt has elapsed, autoend.
+  if (STATE.currentSession.timed && STATE.currentSession.endsAt &&
+      new Date(STATE.currentSession.endsAt).getTime() <= Date.now()) {
+    endSession(true);
+    return;
+  }
+  renderQuestion();
+}
+
+let timerInterval = null;
+function clearTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function renderQuestion() {
+  clearTimer();
+  clear(APP);
+  const sess = STATE.currentSession;
+  if (!sess || sess.idx >= sess.length) { endSession(); return; }
+
+  const qid = sess.ids[sess.idx];
+  const q = STATE.byId[qid];
+  if (!q) {
+    APP.appendChild($el("div", { class: "errbox", text: `Missing question ${qid}` }));
+    return;
+  }
+
+  // Timer / pacing bar.
+  if (sess.timed) {
+    const tb = $el("div", { class: "timerbar" });
+    const clock = $el("div", { class: "clock", id: "session-clock", text: "--:--" });
+    const dot = $el("div", { class: "pace-dot green", id: "pace-dot" });
+    const paceText = $el("div", { class: "small", id: "pace-text", text: "" });
+    tb.appendChild(clock);
+    tb.appendChild(dot);
+    tb.appendChild(paceText);
+    // F5: pause/resume button.
+    const pauseBtn = $el("button", {
+      class: sess.pausedAt ? "primary" : "ghost",
+      text: sess.pausedAt ? "Resume" : "Pause",
+      style: "margin-left: auto;",
+      onclick: () => togglePause(),
+    });
+    tb.appendChild(pauseBtn);
+    APP.appendChild(tb);
+    if (!sess.pausedAt) {
+      timerInterval = setInterval(() => updateClockUI(), 500);
+    }
+    updateClockUI();
+  }
+
+  const head = $el("div", { class: "card" + (sess.pausedAt ? " paused-dim" : "") });
+  const headRow = $el("div", { class: "qhead" });
+  headRow.appendChild($el("div", { class: "qnum",
+    text: `Question ${sess.idx + 1} of ${sess.length}` }));
+
+  const topicLine = $el("div", { class: "small" });
+  for (const t of (q.topics || [])) topicLine.appendChild($el("span", { class: "pill", text: t }));
+  const h = getH(qid);
+  topicLine.appendChild($el("span", {
+    class: "pill " + (h.bucket === "mastered" ? "good" : (h.bucket === "learning" ? "warn" : "")),
+    text: h.bucket + (h.bucket === "learning" ? ` (box ${h.leitnerBox})` : ""),
+  }));
+  headRow.appendChild(topicLine);
+
+  // Star bookmark.
+  const bm = STATE.bookmarks[qid] || {};
+  const star = $el("button", {
+    class: "star-btn" + (bm.starred ? " starred" : ""),
+    title: "Star bookmark",
+    text: bm.starred ? "★" : "☆",
+    onclick: () => toggleStar(qid),
+  });
+  headRow.appendChild(star);
+  // F2: report error button.
+  const reportBtn = $el("button", {
+    class: "report-btn",
+    title: "Report a problem with this question",
+    text: "Report error",
+    onclick: () => openReportErrorModal(qid),
+  });
+  headRow.appendChild(reportBtn);
+  head.appendChild(headRow);
+
+  const bar = $el("div", { class: "row" }, [
+    $el("div", { class: "progressbar" }, [
+      $el("div", { style: `width: ${100 * sess.idx / sess.length}%` }),
+    ]),
+  ]);
+  head.appendChild(bar);
+
+  const stem = $el("div", { class: "stem" });
+  stem.innerHTML = safeMathHTML(q.stem || "");
+  if (q.image) {
+    const imgSrc = q.image.startsWith("images/") ? q.image : "images/" + q.image;
+    const img = $el("img", { src: imgSrc, alt: q.image });
+    stem.appendChild(img);
+  }
+  head.appendChild(stem);
+
+  const optsBox = $el("div", { class: "options" });
+  const letters = ["A", "B", "C", "D", "E"];
+  const confirmed = !!sess.confirmed[qid];
+  const userPick = sess.answers[qid] ? sess.answers[qid].chosen : null;
+
+  // Per-session shuffled display order (Fisher-Yates). Stable per qid within
+  // this session so reopening the same question shows the same order.
+  if (!sess.shuffles) sess.shuffles = {};
+  let order = sess.shuffles[qid];
+  if (!order || order.length !== q.options.length) {
+    order = q.options.map((_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = order[i]; order[i] = order[j]; order[j] = tmp;
+    }
+    sess.shuffles[qid] = order;
+    persistSession();
+  }
+
+  order.forEach((origIdx, displayIdx) => {
+    const opt = q.options[origIdx];
+    const div = $el("div", { class: "opt" });
+    if (userPick === origIdx && !confirmed) div.classList.add("selected");
+    if (confirmed) {
+      if (origIdx === q.answer) div.classList.add(userPick === origIdx ? "correct" : "reveal-correct");
+      else if (userPick === origIdx) div.classList.add("wrong");
+    }
+    div.appendChild($el("span", { class: "letter", text: letters[displayIdx] || String(displayIdx) }));
+    const span = $el("span");
+    span.innerHTML = safeMathHTML(opt);
+    div.appendChild(span);
+    if (!confirmed) {
+      div.addEventListener("click", () => {
+        sess.answers[qid] = { chosen: origIdx, correct: origIdx === q.answer };
+        persistSession();
+        renderQuestion();
+      });
+    }
+    optsBox.appendChild(div);
+  });
+  head.appendChild(optsBox);
+
+  // Action row.
+  const actions = $el("div", { class: "row", style: "margin-top: 12px;" });
+  if (!confirmed) {
+    const confirmBtn = $el("button", {
+      class: "primary", text: "Confirm answer",
+      onclick: () => confirmAnswer(),
+    });
+    confirmBtn.disabled = userPick == null;
+    actions.appendChild(confirmBtn);
+    if (sess.timed) {
+      actions.appendChild($el("button", {
+        text: sess.marked[qid] ? "Marked" : "Skip and return",
+        onclick: () => skipAndReturn(),
+      }));
+    }
+  } else {
+    const nextBtn = $el("button", {
+      class: "primary",
+      text: sess.idx + 1 >= sess.length ? "End session" : "Next question",
+      onclick: () => advance(),
+    });
+    actions.appendChild(nextBtn);
+    const ans = sess.answers[qid];
+    if (ans) {
+      // Tutor available after every confirmed answer (Kai feedback 2026-05-07).
+      // Useful for "is there a faster way?" or "did I get this right for the right reason?".
+      actions.appendChild($el("button", {
+        text: "Open chat tutor",
+        onclick: () => openChatTutor(qid),
+      }));
+    }
+  }
+  // Mark for review.
+  if (sess.timed) {
+    actions.appendChild($el("button", {
+      class: sess.marked[qid] ? "primary" : "ghost",
+      text: sess.marked[qid] ? "Unmark" : "Mark for review",
+      onclick: () => { sess.marked[qid] = !sess.marked[qid]; persistSession(); renderQuestion(); },
+    }));
+  }
+  head.appendChild(actions);
+
+  if (confirmed) {
+    const ans = sess.answers[qid];
+    const fb = $el("div", { class: "feedback " + (ans.correct ? "good" : "bad") });
+    fb.innerHTML = (ans.correct
+      ? "Correct."
+      : `Not quite. Correct answer: <strong>${letters[q.answer]}</strong>.`);
+    if (q.explanation) {
+      const exp = $el("div", { style: "margin-top: 6px;" });
+      exp.innerHTML = safeMathHTML(q.explanation);
+      fb.appendChild(exp);
+    }
+    head.appendChild(fb);
+  }
+
+  // Chat tutor panel if active.
+  if (sess.chats[qid] && sess.chats[qid].length > 0) {
+    head.appendChild(renderChatPanel(qid));
+  }
+
+  // Note area.
+  const noteWrap = $el("div", { style: "margin-top: 10px;" });
+  noteWrap.appendChild($el("div", { class: "small", text: "Personal note (max 500 chars):" }));
+  const noteArea = $el("textarea", { class: "note-area", maxlength: "500" });
+  noteArea.value = (STATE.bookmarks[qid] && STATE.bookmarks[qid].note) || "";
+  noteArea.addEventListener("change", () => updateNote(qid, noteArea.value));
+  noteArea.addEventListener("blur", () => updateNote(qid, noteArea.value));
+  noteWrap.appendChild(noteArea);
+  head.appendChild(noteWrap);
+
+  APP.appendChild(head);
+
+  const foot = $el("div", { class: "row between small" });
+  foot.appendChild($el("span", { text: `Mode: ${sess.mode}` }));
+  foot.appendChild($el("button", {
+    class: "ghost", text: "End session early",
+    onclick: () => endSession(),
+  }));
+  APP.appendChild(foot);
+
+  renderMath(APP);
+  updateHeader();
+}
+
+function updateClockUI() {
+  const sess = STATE.currentSession;
+  if (!sess || !sess.timed) return;
+  const clock = document.getElementById("session-clock");
+  const dot = document.getElementById("pace-dot");
+  const paceText = document.getElementById("pace-text");
+  if (!clock) return;
+  // F5: while paused, the displayed remaining freezes at the value captured when pause started.
+  if (sess.pausedAt) {
+    const frozenRemaining = Math.max(0, Math.floor(
+      (new Date(sess.endsAt).getTime() - new Date(sess.pausedAt).getTime()) / 1000));
+    clock.textContent = fmtMMSS(frozenRemaining) + " (paused)";
+    if (dot) dot.className = "pace-dot";
+    if (paceText) paceText.textContent = "paused";
+    return;
+  }
+  const remaining = Math.max(0, Math.floor((new Date(sess.endsAt).getTime() - Date.now()) / 1000));
+  clock.textContent = fmtMMSS(remaining);
+  // Pacing: expected idx = (elapsed / total) * length, excluding paused time.
+  const totalSec = sess.minutes * 60;
+  const elapsed = totalSec - remaining;
+  const expectedIdx = (elapsed / totalSec) * sess.length;
+  const behind = expectedIdx - sess.idx;
+  let cls = "green", txt = "on pace";
+  if (behind >= 3) { cls = "red"; txt = `${behind.toFixed(1)} behind`; }
+  else if (behind >= 1) { cls = "yellow"; txt = `${behind.toFixed(1)} behind`; }
+  else if (behind <= -1) { txt = "ahead"; }
+  if (dot) dot.className = "pace-dot " + cls;
+  if (paceText) paceText.textContent = txt;
+
+  if (remaining <= 0) {
+    clearTimer();
+    endSession(true);
+  }
+}
+
+// F5: toggle pause for a timed session.
+function togglePause() {
+  const sess = STATE.currentSession;
+  if (!sess || !sess.timed) return;
+  if (sess.pausedAt) {
+    // Resume: extend endsAt by the paused duration so the player keeps the same time budget.
+    const pauseMs = Date.now() - new Date(sess.pausedAt).getTime();
+    sess.totalPausedMs = (sess.totalPausedMs || 0) + pauseMs;
+    sess.endsAt = new Date(new Date(sess.endsAt).getTime() + pauseMs).toISOString();
+    sess.pausedAt = null;
+    // Also reset questionStartTs so the per-question time isn't polluted by the pause.
+    sess.questionStartTs = nowIso();
+  } else {
+    sess.pausedAt = nowIso();
+  }
+  persistSession();
+  renderQuestion();
+}
+
+function skipAndReturn() {
+  const sess = STATE.currentSession;
+  if (!sess) return;
+  const qid = sess.ids[sess.idx];
+  sess.marked[qid] = true;
+  // Move this idx to the end (if not already answered).
+  const list = sess.ids;
+  const tail = list.splice(sess.idx, 1);
+  list.push(tail[0]);
+  // Don't increment idx; next iteration shows the new question at this index.
+  persistSession();
+  renderQuestion();
+}
+
+function confirmAnswer() {
+  const sess = STATE.currentSession;
+  const qid = sess.ids[sess.idx];
+  const q = STATE.byId[qid];
+  const ans = sess.answers[qid];
+  if (!ans) return;
+  sess.confirmed[qid] = true;
+  const startTs = sess.questionStartTs ? new Date(sess.questionStartTs).getTime() : null;
+  const timeSec = startTs ? Math.round((Date.now() - startTs) / 1000) : null;
+  recordAttempt(qid, ans.chosen, ans.correct, sess.mode, timeSec);
+  persistSession();
+  renderQuestion();
+  // Wrong-answer pattern check.
+  if (!ans.correct) maybeRunPatternDetection();
+}
+
+function advance() {
+  const sess = STATE.currentSession;
+  if (!sess) return;
+  if (sess.idx + 1 >= sess.length) { endSession(); return; }
+  sess.idx += 1;
+  sess.questionStartTs = nowIso();
+  persistSession();
+  renderQuestion();
+}
+
+function toggleStar(qid) {
+  if (!STATE.bookmarks[qid]) STATE.bookmarks[qid] = { starred: false, note: "" };
+  STATE.bookmarks[qid].starred = !STATE.bookmarks[qid].starred;
+  saveAll();
+  if (STATE.currentSession) renderQuestion(); else renderHome();
+}
+function updateNote(qid, text) {
+  if (!STATE.bookmarks[qid]) STATE.bookmarks[qid] = { starred: false, note: "" };
+  STATE.bookmarks[qid].note = (text || "").slice(0, 500);
+  saveAll();
+}
+
+// ==========================================================================
+// Chat tutor
+// ==========================================================================
+async function openChatTutor(qid) {
+  const sess = STATE.currentSession;
+  if (!sess) return;
+  let pw = getPassword();
+  if (!pw) pw = await showPasswordModal();
+  const persisted = loadChat(qid);
+  if (persisted && persisted.length > 0 && (!sess.chats[qid] || sess.chats[qid].length === 0)) {
+    sess.chats[qid] = persisted;
+  }
+  if (!sess.chats[qid]) sess.chats[qid] = [];
+  // Send first turn automatically: user message asking for the teaching.
+  if (sess.chats[qid].length === 0) {
+    sess.chats[qid].push({
+      role: "user",
+      content: "I got this question wrong. Teach me the rule I need so I can solve this family of problems next time.",
+    });
+    persistSession();
+    saveChat(qid, sess.chats[qid]);
+    renderQuestion();
+    await callChatTurn(qid);
+  } else {
+    renderQuestion();
+  }
+}
+
+function renderChatPanel(qid) {
+  const sess = STATE.currentSession;
+  const q = STATE.byId[qid];
+  const ans = sess.answers[qid];
+  const panel = $el("div", { class: "chat-panel" });
+
+  const ctx = $el("details", { class: "chat-context" });
+  ctx.appendChild($el("summary", { text: "Question context (collapsed)" }));
+  const ctxBody = $el("div");
+  ctxBody.innerHTML = `<div style="margin-top:6px;"><b>Q:</b> ${safeMathHTML(q.stem || "")}</div>` +
+    `<div><b>You picked:</b> ${safeMathHTML(q.options[ans.chosen] || "")}</div>` +
+    `<div><b>Correct:</b> ${safeMathHTML(q.options[q.answer] || "")}</div>`;
+  ctx.appendChild(ctxBody);
+  panel.appendChild(ctx);
+
+  const msgs = $el("div", { class: "chat-msgs" });
+  for (const m of (sess.chats[qid] || [])) {
+    const div = $el("div", { class: "chat-msg " + m.role });
+    div.appendChild($el("div", { class: "who", text: m.role === "user" ? "you" : "claude" }));
+    const body = $el("div");
+    body.innerHTML = m.content;
+    div.appendChild(body);
+    msgs.appendChild(div);
+  }
+  panel.appendChild(msgs);
+
+  const inp = $el("textarea", { class: "chat-input", placeholder: "Ask a follow-up..." });
+  panel.appendChild(inp);
+  const row = $el("div", { class: "row", style: "margin-top: 8px;" });
+  row.appendChild($el("button", {
+    class: "primary", text: "Send",
+    onclick: async () => {
+      const text = inp.value.trim();
+      if (!text) return;
+      sess.chats[qid].push({ role: "user", content: text });
+      persistSession();
+      saveChat(qid, sess.chats[qid]);
+      inp.value = "";
+      renderQuestion();
+      await callChatTurn(qid);
+    },
+  }));
+  row.appendChild($el("button", {
+    text: "Generate 3 similar problems",
+    onclick: () => generateSimilar(qid),
+  }));
+  row.appendChild($el("button", {
+    class: "ghost", text: "Clear chat",
+    onclick: () => {
+      if (!confirm("Clear this conversation?")) return;
+      sess.chats[qid] = [];
+      clearChat(qid);
+      persistSession();
+      renderQuestion();
+    },
+  }));
+  panel.appendChild(row);
+
+  // Generated mini-quiz, if any.
+  if (sess.chats[qid] && sess.chats[qid]._generated) {
+    panel.appendChild(renderGeneratedMiniQuiz(qid));
+  }
+
+  // After render, KaTeX re-render.
+  setTimeout(() => renderMath(panel), 30);
+  return panel;
+}
+
+async function callChatTurn(qid) {
+  const sess = STATE.currentSession;
+  if (!sess) return;
+  const q = STATE.byId[qid];
+  const ans = sess.answers[qid];
+  let pw = getPassword();
+  if (!pw) pw = await showPasswordModal();
+
+  // Pending placeholder.
+  sess.chats[qid].push({ role: "assistant", content: "thinking..." });
+  persistSession();
+  renderQuestion();
+
+  try {
+    const messages = sess.chats[qid].slice(0, -1).map(m => ({ role: m.role, content: m.content }));
+    const resp = await fetch(TUTOR_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: "chat",
+        context: {
+          question: q.stem,
+          choices: q.options,
+          wrongChoice: ans ? q.options[ans.chosen] : "",
+          correctChoice: q.options[q.answer],
+        },
+        messages,
+        password: pw,
+      }),
+    });
+    if (resp.status === 401) {
+      clearPassword();
+      sess.chats[qid][sess.chats[qid].length - 1].content = "Wrong password. Click Send again to retry.";
+    } else if (!resp.ok) {
+      const text = await resp.text();
+      sess.chats[qid][sess.chats[qid].length - 1].content = `Tutor error (${resp.status}): ${escapeHTML(text).slice(0, 300)}`;
+    } else {
+      const j = await resp.json();
+      const reply = j.reply || j.teaching || "(empty)";
+      sess.chats[qid][sess.chats[qid].length - 1].content = reply;
+      // Extract & store rule.
+      const rule = extractRule(reply);
+      if (rule) recordRule(qid, rule);
+    }
+  } catch (e) {
+    sess.chats[qid][sess.chats[qid].length - 1].content = `Could not reach the tutor service. ${escapeHTML(e.message || "")}`;
+  }
+  persistSession();
+  saveChat(qid, sess.chats[qid]);
+  renderQuestion();
+}
+
+async function generateSimilar(qid) {
+  const sess = STATE.currentSession;
+  if (!sess) return;
+  const q = STATE.byId[qid];
+  let pw = getPassword();
+  if (!pw) pw = await showPasswordModal();
+
+  if (!sess.chats[qid]) sess.chats[qid] = [];
+  sess.chats[qid].push({ role: "assistant", content: "Generating 3 similar problems..." });
+  persistSession();
+  renderQuestion();
+
+  try {
+    const resp = await fetch(GENERATE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        source: {
+          question: q.stem,
+          choices: q.options,
+          correctChoice: q.options[q.answer],
+          topics: q.topics || [],
+        },
+        password: pw,
+      }),
+    });
+    if (resp.status === 401) {
+      clearPassword();
+      sess.chats[qid][sess.chats[qid].length - 1].content = "Wrong password.";
+    } else if (!resp.ok) {
+      const text = await resp.text();
+      sess.chats[qid][sess.chats[qid].length - 1].content = `Generator error (${resp.status}): ${escapeHTML(text).slice(0, 300)}`;
+    } else {
+      const j = await resp.json();
+      sess.chats[qid].pop();
+      sess.chats[qid].push({ role: "assistant", content: "Three similar problems generated below." });
+      sess.chats[qid]._generated = j.questions.map(g => ({
+        ...g,
+        chosen: null,
+        confirmed: false,
+      }));
+    }
+  } catch (e) {
+    sess.chats[qid][sess.chats[qid].length - 1].content = `Generator failed. ${escapeHTML(e.message || "")}`;
+  }
+  persistSession();
+  saveChat(qid, sess.chats[qid]);
+  renderQuestion();
+}
+
+function renderGeneratedMiniQuiz(qid) {
+  const sess = STATE.currentSession;
+  const arr = sess.chats[qid]._generated || [];
+  const wrap = $el("div", { style: "margin-top: 10px;" });
+  wrap.appendChild($el("h3", { text: "Mini-quiz: 3 similar problems" }));
+  const letters = ["A","B","C","D","E"];
+  arr.forEach((g, gi) => {
+    const card = $el("div", { class: "gen-q" + (g.confirmed ? (g.chosen === g.correct_answer ? " correct" : " wrong") : "") });
+    const stem = $el("div");
+    stem.innerHTML = `<b>${gi + 1}.</b> ` + safeMathHTML(g.question || "");
+    card.appendChild(stem);
+    g.choices.forEach((c, ci) => {
+      const o = $el("div", { class: "opt", style: "margin-top:4px;" });
+      if (g.chosen === ci && !g.confirmed) o.classList.add("selected");
+      if (g.confirmed) {
+        if (ci === g.correct_answer) o.classList.add("reveal-correct");
+        else if (g.chosen === ci) o.classList.add("wrong");
+      }
+      o.appendChild($el("span", { class: "letter", text: letters[ci] || String(ci) }));
+      const sp = $el("span"); sp.innerHTML = safeMathHTML(c); o.appendChild(sp);
+      if (!g.confirmed) {
+        o.addEventListener("click", () => { g.chosen = ci; persistSession(); saveChat(qid, sess.chats[qid]); renderQuestion(); });
+      }
+      card.appendChild(o);
+    });
+    if (!g.confirmed) {
+      const btn = $el("button", { class: "primary", text: "Submit", style: "margin-top:6px;",
+        onclick: () => { g.confirmed = true; persistSession(); saveChat(qid, sess.chats[qid]); renderQuestion(); } });
+      btn.disabled = g.chosen == null;
+      card.appendChild(btn);
+    } else {
+      const fb = $el("div", { class: "feedback " + (g.chosen === g.correct_answer ? "good" : "bad") });
+      fb.innerHTML = (g.chosen === g.correct_answer ? "Correct." :
+        `Not quite. Correct: <b>${letters[g.correct_answer]}</b>.`) +
+        (g.explanation ? `<div style="margin-top:6px;">${safeMathHTML(g.explanation)}</div>` : "");
+      card.appendChild(fb);
+    }
+    wrap.appendChild(card);
+  });
+  setTimeout(() => renderMath(wrap), 30);
+  return wrap;
+}
+
+// ==========================================================================
+// End session
+// ==========================================================================
+function endSession(timedOut) {
+  clearTimer();
+  const sess = STATE.currentSession;
+  if (!sess) { renderHome(); return; }
+
+  // Early-end behavior: if the user is mid-question (an option is highlighted but
+  // not Confirmed), do NOT record the current qid. Strip any unconfirmed entries
+  // from sess.answers so the session summary, accuracy, Leitner, and pattern
+  // detection treat the question as never-seen. recordAttempt was never called
+  // for it because that only fires inside confirmAnswer().
+  for (const qid of Object.keys(sess.answers || {})) {
+    if (!(sess.confirmed && sess.confirmed[qid])) {
+      delete sess.answers[qid];
+    }
+  }
+
+  let correct = 0, wrong = 0, answered = 0;
+  for (const qid of sess.ids) {
+    const ans = sess.answers[qid];
+    if (!ans) continue;
+    answered += 1;
+    if (ans.correct) correct += 1; else wrong += 1;
+  }
+  const total = sess.length;
+  const ets = etsScaledScore(correct, total);
+
+  const summary = {
+    startedAt: sess.startedAt,
+    endedAt: nowIso(),
+    mode: sess.mode,
+    timed: !!sess.timed,
+    length: sess.length,
+    answered, correct, wrong,
+    ids: sess.ids.slice(),
+    marked: Object.keys(sess.marked).filter(k => sess.marked[k]),
+    timedOut: !!timedOut,
+    etsScaled: ets,
+    totalPausedMs: sess.totalPausedMs || 0,
+  };
+  STATE.sessions.push(summary);
+  saveAll();
+  STATE.currentSession = null;
+  persistSession();
+
+  // Render summary screen.
+  clear(APP);
+  const card = $el("div", { class: "card" });
+  card.appendChild($el("h2", { text: "Session summary" }));
+  card.appendChild($el("div", { html:
+    `<b>${correct} / ${answered}</b> correct of ${answered} answered (${total} delivered). ` +
+    (ets ? `<span class="pill accent">ETS-equivalent: ${ets}</span>` : "") +
+    (timedOut ? ` <span class="pill bad">time expired</span>` : "")
+  }));
+
+  if (summary.marked.length) {
+    card.appendChild($el("h3", { text: "Marked for review" }));
+    const ul = $el("ul"); for (const id of summary.marked) {
+      const q = STATE.byId[id]; const li = $el("li");
+      li.innerHTML = `<b>${id}</b>: ${escapeHTML((q && q.stem || "").slice(0, 120))}`;
+      ul.appendChild(li);
+    } card.appendChild(ul);
+  }
+
+  // Per-topic breakdown.
+  const byTopic = {};
+  for (const id of sess.ids) {
+    const ans = sess.answers[id]; if (!ans) continue;
+    const q = STATE.byId[id]; if (!q) continue;
+    for (const t of (q.topics || [])) {
+      if (!byTopic[t]) byTopic[t] = { c: 0, n: 0 };
+      byTopic[t].n += 1; if (ans.correct) byTopic[t].c += 1;
+    }
+  }
+  if (Object.keys(byTopic).length) {
+    card.appendChild($el("h3", { text: "Topic breakdown" }));
+    const ul = $el("ul");
+    for (const [t, v] of Object.entries(byTopic).sort()) {
+      const li = $el("li", { html: `<b>${t}</b>: ${v.c}/${v.n}` });
+      ul.appendChild(li);
+    } card.appendChild(ul);
+  }
+
+  // Missed questions.
+  const missed = sess.ids.filter(id => sess.answers[id] && !sess.answers[id].correct);
+  if (missed.length) {
+    card.appendChild($el("h3", { text: "Missed questions" }));
+    const ul = $el("ul", { class: "qsublist" });
+    for (const id of missed) {
+      const q = STATE.byId[id]; const li = $el("li");
+      li.innerHTML = `<b>${id}</b><div class="qmeta">${escapeHTML((q && q.stem || "").slice(0, 200))}</div>` +
+        `<div class="qmeta"><b>Why:</b> ${q && q.explanation ? q.explanation : "see explanation in question."}</div>`;
+      ul.appendChild(li);
+    } card.appendChild(ul);
+  }
+
+  const row = $el("div", { class: "row", style: "margin-top: 14px;" });
+  row.appendChild($el("button", { class: "primary", text: "Home", onclick: () => renderHome() }));
+  row.appendChild($el("button", { text: "Export to PDF", onclick: () => exportSessionPDF(summary) }));
+  row.appendChild($el("button", { text: "Download stats (jsonl)", onclick: () => downloadStats() }));
+  row.appendChild($el("button", { class: "ghost", text: "Reset all progress (this profile)", onclick: () => resetProgress() }));
+  card.appendChild(row);
+  APP.appendChild(card);
+  renderMath(APP);
+}
+
+function downloadStats() {
+  const lines = STATE.log.map(r => JSON.stringify(r)).join("\n") + "\n";
+  const blob = new Blob([lines], { type: "application/x-ndjson" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `attempts-${STATE.activeProfile}.jsonl`;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+}
+function resetProgress() {
+  if (!confirm("Erase ALL progress for profile '" + STATE.activeProfile + "'? Cannot be undone.")) return;
+  for (const k of ["history","log","sessions","settings","bookmarks","rules","patterns",
+                    "patterns_history","testday","session.current","topic_filter","custom_mode"]) {
+    try { localStorage.removeItem(profileKey(k)); } catch (e) {}
+  }
+  // Also clear chat keys for this profile.
+  const prefix = "profile:" + STATE.activeProfile + ":chat:";
+  const toDel = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith(prefix)) toDel.push(k);
+  }
+  for (const k of toDel) localStorage.removeItem(k);
+  loadProfileData();
+  renderHome();
+}
+
+// ==========================================================================
+// PDF export, lazy-load jsPDF.
+// ==========================================================================
+let jsPdfLoading = null;
+function ensureJsPDF() {
+  if (window.jspdf && window.jspdf.jsPDF) return Promise.resolve();
+  if (jsPdfLoading) return jsPdfLoading;
+  jsPdfLoading = new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = "https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js";
+    s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+  return jsPdfLoading;
+}
+
+async function exportSessionPDF(summary) {
+  await ensureJsPDF();
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "pt", format: "letter" });
+  const margin = 50; let y = margin;
+  const lineH = 14; const w = doc.internal.pageSize.getWidth() - 2 * margin;
+
+  function writeLine(txt, opts) {
+    if (y > doc.internal.pageSize.getHeight() - margin) { doc.addPage(); y = margin; }
+    doc.setFontSize((opts && opts.size) || 11);
+    doc.setFont("helvetica", (opts && opts.bold) ? "bold" : "normal");
+    const wrapped = doc.splitTextToSize(txt, w);
+    for (const ln of wrapped) {
+      if (y > doc.internal.pageSize.getHeight() - margin) { doc.addPage(); y = margin; }
+      doc.text(ln, margin, y); y += lineH;
+    }
+  }
+
+  writeLine("GRE Math Subject Test, session report", { size: 16, bold: true }); y += 6;
+  writeLine("Profile: " + STATE.activeProfile);
+  writeLine("Date: " + summary.startedAt.slice(0, 10) + " to " + summary.endedAt.slice(11, 19));
+  writeLine("Mode: " + summary.mode + (summary.timed ? " (timed)" : " (untimed)"));
+  writeLine("Score: " + summary.correct + " / " + summary.answered + " of " + summary.length + " delivered. ETS-equivalent: " + (summary.etsScaled || "n/a"));
+  y += 4;
+
+  // Topic breakdown computed from log entries within the session window.
+  writeLine("Topic breakdown", { bold: true });
+  const counts = {};
+  for (const id of summary.ids) {
+    const q = STATE.byId[id]; if (!q) continue;
+    const entries = STATE.log.filter(e => e.qid === id && e.ts >= summary.startedAt && e.ts <= summary.endedAt);
+    if (entries.length === 0) continue;
+    const last = entries[entries.length - 1];
+    for (const t of (q.topics || [])) {
+      if (!counts[t]) counts[t] = { c: 0, n: 0 };
+      counts[t].n += 1; if (last.correct) counts[t].c += 1;
+    }
+  }
+  for (const [t, v] of Object.entries(counts).sort()) writeLine("- " + t + ": " + v.c + "/" + v.n);
+  y += 4;
+
+  // Missed questions.
+  writeLine("Missed questions", { bold: true });
+  const missed = summary.ids.filter(id => {
+    const entries = STATE.log.filter(e => e.qid === id && e.ts >= summary.startedAt && e.ts <= summary.endedAt);
+    return entries.length && !entries[entries.length - 1].correct;
+  });
+  if (missed.length === 0) writeLine("(none)");
+  for (const id of missed) {
+    const q = STATE.byId[id];
+    writeLine(id + ": " + (q.stem || "").replace(/\\\(/g, "(").replace(/\\\)/g, ")"), { bold: true });
+    if (q.explanation) writeLine("Explanation: " + q.explanation.replace(/\\\(/g, "(").replace(/\\\)/g, ")"));
+    y += 2;
+  }
+
+  // Rules learned in this profile.
+  writeLine("Rules in this profile", { bold: true });
+  const rules = Object.values(STATE.rules);
+  if (rules.length === 0) writeLine("(none yet)");
+  for (const r of rules) writeLine("[box " + r.box + "] " + r.text);
+
+  doc.save("gre-session-" + STATE.activeProfile + "-" + summary.startedAt.slice(0, 10) + ".pdf");
+}
+
+// ==========================================================================
+// Keyboard shortcuts during a session.
+// ==========================================================================
+document.addEventListener("keydown", (ev) => {
+  const sess = STATE.currentSession;
+  if (!sess) return;
+  const tag = (ev.target && ev.target.tagName) || "";
+  if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+  const qid = sess.ids[sess.idx];
+  const q = STATE.byId[qid]; if (!q) return;
+  const confirmed = !!sess.confirmed[qid];
+  // F5: while paused, swallow gameplay keys.
+  if (sess.pausedAt) return;
+
+  if (!confirmed && ev.key >= "1" && ev.key <= "5") {
+    const displayIdx = Number(ev.key) - 1;
+    const order = (sess.shuffles && sess.shuffles[qid]) || q.options.map((_, k) => k);
+    if (displayIdx < order.length) {
+      const origIdx = order[displayIdx];
+      sess.answers[qid] = { chosen: origIdx, correct: origIdx === q.answer };
+      persistSession();
+      renderQuestion();
+    }
+    ev.preventDefault();
+    return;
+  }
+  if (ev.key === "Enter") {
+    if (!confirmed && sess.answers[qid]) { confirmAnswer(); ev.preventDefault(); }
+    else if (confirmed) { advance(); ev.preventDefault(); }
+    return;
+  }
+  if (confirmed && ev.key === " ") {
+    advance(); ev.preventDefault(); return;
+  }
+  if (confirmed && (ev.key === "t" || ev.key === "T")) {
+    openChatTutor(qid); ev.preventDefault(); return;
+  }
+  if (ev.key === "m" || ev.key === "M") {
+    sess.marked[qid] = !sess.marked[qid]; persistSession(); renderQuestion();
+    ev.preventDefault(); return;
+  }
+  if (ev.key === "s" || ev.key === "S") {
+    toggleStar(qid); ev.preventDefault(); return;
+  }
+  if (ev.key === "n" || ev.key === "N") {
+    const noteArea = document.querySelector(".note-area");
+    if (noteArea) { noteArea.focus(); ev.preventDefault(); }
+    return;
+  }
+});
+
+// ==========================================================================
+// Profile picker + boot.
+// ==========================================================================
+async function pickInitialProfile() {
+  let active = lsLoad(LS_GLOBAL_ACTIVE, null);
+  if (active) { STATE.activeProfile = active; return; }
+  const list = getProfiles();
+  const wrap = $el("div");
+  wrap.appendChild($el("div", { class: "small", text: "Pick a profile.", style: "margin-bottom: 8px;" }));
+  const sel = $el("select", { style: "width: 100%; padding: 8px;" });
+  for (const p of list) sel.appendChild($el("option", { value: p.name, text: p.name }));
+  wrap.appendChild(sel);
+  const newBox = $el("div", { style: "margin-top: 8px;" });
+  newBox.appendChild($el("div", { class: "small", text: "Or add a new profile:" }));
+  const newInput = $el("input", { type: "text", placeholder: "name (lowercase)" });
+  newBox.appendChild(newInput);
+  wrap.appendChild(newBox);
+  const choice = await showModal("Welcome", wrap, [
+    { label: "Add", value: "add" },
+    { label: "Use selected", value: "use", primary: true },
+  ]);
+  if (choice === "add" && newInput.value.trim()) {
+    const n = addProfile(newInput.value);
+    if (n) { STATE.activeProfile = n; lsSave(LS_GLOBAL_ACTIVE, n); return; }
+  }
+  STATE.activeProfile = sel.value || "kai";
+  lsSave(LS_GLOBAL_ACTIVE, STATE.activeProfile);
+}
+
+async function boot() {
+  await pickInitialProfile();
+  loadProfileData();
+  if (!getPassword()) await showPasswordModal();
+  try {
+    const resp = await fetch(QUESTIONS_URL, { cache: "no-store" });
+    if (!resp.ok) throw new Error("fetch " + QUESTIONS_URL + " -> " + resp.status);
+    STATE.questions = await resp.json();
+  } catch (e) {
+    APP.appendChild($el("div", { class: "errbox", html:
+      "Could not load <code>" + QUESTIONS_URL + "</code>. " + e }));
+    return;
+  }
+  for (const q of STATE.questions) STATE.byId[q.id] = q;
+  updateHeader();
+  renderHome();
+}
+
+boot();
+</script>
+</body>
+</html>

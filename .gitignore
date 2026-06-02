@@ -1,0 +1,25 @@
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# Editor cruft
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Dependencies
+node_modules/
+
+# Local test runner artifacts
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# Local secrets (must never be committed)
+.env
+.env.local
+
+# Build artifacts
+.netlify/
