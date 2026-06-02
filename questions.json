@@ -3944,11 +3944,11 @@
       "\\(f\\) is a constant function.",
       "\\(f'\\) is a constant function."
     ],
-    "answer": 0,
+    "answer": 1,
     "explanation": "If \\(\\lim f'(x) = L \\ne 0\\), then \\(f\\) grows linearly, contradicting finite \\(\\lim f\\). So \\(\\lim f'(x) = 0\\).",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": []
   },
   {
