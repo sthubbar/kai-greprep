@@ -227,9 +227,13 @@ const HEALTH_URL = "/.netlify/functions/health";
 const GENERATE_URL = "/.netlify/functions/generate";
 const PATTERN_URL = "/.netlify/functions/pattern";
 
+// Leitner interval ladder, in DAYS. The Nth entry is the delay applied when a
+// question is promoted into box N (1-indexed). A correct answer in box K sets
+// next_review = now + LEITNER_INTERVALS_DAYS[K-1] days.
 const LEITNER_INTERVALS_DAYS = [1, 3, 7, 14, 30];
+// After this many consecutive correct answers, a question exits Learning into
+// Mastered and stops appearing in normal selection.
 const MASTERY_STREAK = 3;
-const MIX_TARGETS = { learning: 0.60, review: 0.30, new: 0.10 };
 
 // Rule-recall Leitner.
 const RULE_BOX_MAX = 5;
@@ -676,10 +680,14 @@ function recordAttempt(qid, chosenIdx, correct, mode, timeSec) {
       }
     }
   } else {
+    // Wrong answer. Demote one box (never below 1) and mark due immediately so
+    // the question reappears in the very next session, not 24 hours later.
+    // This matches Steve's spaced-repetition expectation (2026-06-02): missed
+    // questions should be drilled now, recently-correct ones should rest.
     h.streak = 0;
     h.bucket = "learning";
-    h.leitnerBox = 1;
-    h.nextReview = new Date(Date.now() + dayMs(LEITNER_INTERVALS_DAYS[0])).toISOString();
+    h.leitnerBox = Math.max(1, h.leitnerBox - 1);
+    h.nextReview = nowIso();
   }
   STATE.log.push({ qid, ts: nowIso(), mode, chosen: chosenIdx, correct: !!correct, time_sec: timeSec });
   saveAll();
@@ -720,14 +728,18 @@ function bucketCounts() {
 }
 
 function selectAdaptive(length) {
+  // Priority order (Steve directive 2026-06-02):
+  //   1. review_due: questions whose Leitner interval has elapsed (overdue
+  //      promotions) OR wrong-answer rebooks (due immediately). Drill these.
+  //   2. new: questions never attempted.
+  //   3. learning_not_due: questions still inside their Leitner spacing.
+  //      Only pulled as fill when the first two pools cannot fill the session.
+  //   4. mastered: pulled only as last-resort fill.
+  // This replaces the prior fixed 60/30/10 mix, which had the unintended
+  // effect of preferring NOT-due questions and surfacing same-session repeats.
   const buckets = { new: [], review_due: [], learning_not_due: [], mastered: [] };
   for (const q of filteredActiveQuestions()) buckets[classify(q.id)].push(q.id);
   for (const k of Object.keys(buckets)) shuffleInPlace(buckets[k]);
-  const want = {
-    learning: Math.round(length * MIX_TARGETS.learning),
-    review:   Math.round(length * MIX_TARGETS.review),
-    new:      length - Math.round(length * MIX_TARGETS.learning) - Math.round(length * MIX_TARGETS.review),
-  };
   const picked = []; const seen = new Set();
   function take(pool, n) {
     while (n > 0 && pool.length > 0) {
@@ -736,13 +748,9 @@ function selectAdaptive(length) {
       seen.add(id); picked.push(id); n--;
     }
   }
-  take(buckets.review_due, want.review);
-  take(buckets.learning_not_due, want.learning);
-  take(buckets.new, want.new);
-  if (picked.length < length) {
-    const fill = [...buckets.review_due, ...buckets.learning_not_due, ...buckets.new];
-    take(fill, length - picked.length);
-  }
+  take(buckets.review_due, length);
+  if (picked.length < length) take(buckets.new, length - picked.length);
+  if (picked.length < length) take(buckets.learning_not_due, length - picked.length);
   if (picked.length < length) take(buckets.mastered, length - picked.length);
   shuffleInPlace(picked);
   return picked;
