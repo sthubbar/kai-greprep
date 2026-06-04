@@ -709,13 +709,23 @@ function recordAttempt(qid, chosenIdx, correct, mode, timeSec) {
     // If !wasDue and not mastered: nothing changes. Extra practice on a card
     // inside its Learning interval is welcomed but does not advance the box.
   } else {
-    // Wrong answer. Demote one box (never below 1) and mark due immediately.
-    // A Mastered card that was missed goes back to Learning and the hidden
-    // refresh counter resets.
+    // Wrong answer. Drop ONE rung on the unified ladder
+    // (M3 -> M2 -> M1 -> L3 -> L2 -> L1) and mark due immediately. Flaky
+    // cards naturally oscillate around their real mastery level; a single
+    // miss does not nuke months of progress. Steve directive 2026-06-04.
+    if (h.bucket === "mastered" && (h.masteredBox || 0) > 1) {
+      // Stay Mastered, drop one mastered rung.
+      h.masteredBox -= 1;
+    } else if (h.bucket === "mastered") {
+      // Fall out of Mastered into Learning at the top of the Learning ladder.
+      h.bucket = "learning";
+      h.masteredBox = 0;
+      h.leitnerBox = LEITNER_INTERVALS_DAYS.length;  // top of Learning
+    } else {
+      // Already Learning. Drop one box, clamped at 1.
+      h.leitnerBox = Math.max(1, (h.leitnerBox || 1) - 1);
+    }
     h.streak = 0;
-    h.bucket = "learning";
-    h.leitnerBox = Math.max(1, (h.leitnerBox || 0) - 1);
-    h.masteredBox = 0;
     h.nextReview = nowIso();
   }
   STATE.log.push({ qid, ts: nowIso(), mode, chosen: chosenIdx, correct: !!correct, time_sec: timeSec });
@@ -2663,7 +2673,8 @@ function endSession(timedOut) {
   row.appendChild($el("button", { class: "primary", text: "Home", onclick: () => renderHome() }));
   row.appendChild($el("button", { text: "Export to PDF", onclick: () => exportSessionPDF(summary) }));
   row.appendChild($el("button", { text: "Download stats (jsonl)", onclick: () => downloadStats() }));
-  row.appendChild($el("button", { class: "ghost", text: "Reset all progress (this profile)", onclick: () => resetProgress() }));
+  row.appendChild($el("button", { class: "ghost", text: "Reset cards", title: "Cards return to New. Score chart, sessions, bookmarks, notes are kept.", onclick: () => resetCardProgress() }));
+  row.appendChild($el("button", { class: "ghost", text: "Erase everything", title: "Delete ALL progress, charts, history, bookmarks, notes for this profile.", onclick: () => resetProgress() }));
   card.appendChild(row);
   APP.appendChild(card);
   renderMath(APP);
@@ -2678,14 +2689,45 @@ function downloadStats() {
   document.body.appendChild(a); a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
 }
+// Reset per-question progress only. Score chart, session history, bookmarks,
+// notes, tutor chats, rules, patterns, target date, topic filter, custom mode
+// are all KEPT. Cards return to New. Steve directive 2026-06-04.
+function resetCardProgress() {
+  const profile = STATE.activeProfile;
+  if (!confirm(
+    "Reset card progress for profile '" + profile + "'?\n\n" +
+    "All questions return to New. Your score chart, session history, " +
+    "bookmarks, notes, and tutor chats are KEPT."
+  )) return;
+  try { localStorage.removeItem(profileKey("history")); } catch (e) {}
+  STATE.history = {};
+  loadProfileData();
+  renderHome();
+}
+
+// Nuclear option: wipe EVERYTHING for this profile. Two-step confirmation.
 function resetProgress() {
-  if (!confirm("Erase ALL progress for profile '" + STATE.activeProfile + "'? Cannot be undone.")) return;
+  const profile = STATE.activeProfile;
+  if (!confirm(
+    "DANGER. Erase EVERYTHING for profile '" + profile + "'?\n\n" +
+    "All card progress, your score chart, every session, bookmarks, notes, " +
+    "tutor chats, rules, patterns, target date will be permanently deleted. " +
+    "This cannot be undone."
+  )) return;
+  const typed = prompt(
+    "Type the profile name '" + profile + "' to confirm permanent deletion. " +
+    "Cancel to abort."
+  );
+  if (typed !== profile) {
+    alert("Profile name did not match. Nothing was deleted.");
+    return;
+  }
   for (const k of ["history","log","sessions","settings","bookmarks","rules","patterns",
                     "patterns_history","testday","session.current","topic_filter","custom_mode"]) {
     try { localStorage.removeItem(profileKey(k)); } catch (e) {}
   }
   // Also clear chat keys for this profile.
-  const prefix = "profile:" + STATE.activeProfile + ":chat:";
+  const prefix = "profile:" + profile + ":chat:";
   const toDel = [];
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
