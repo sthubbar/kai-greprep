@@ -1263,7 +1263,16 @@ function renderMyNotesCard() {
 const MASTERY_BROWSE_OPEN = { new: false, learning: false, mastered: false };
 function renderMasteryBrowserCard() {
   const card = $el("div", { class: "card" });
-  card.appendChild($el("h2", { text: "Questions by mastery" }));
+  const header = $el("div", { style: "display: flex; align-items: center; justify-content: space-between;" });
+  header.appendChild($el("h2", { text: "Questions by mastery", style: "margin: 0;" }));
+  header.appendChild($el("button", {
+    class: "ghost",
+    text: "Reset cards",
+    title: "Cards return to New. Score chart, sessions, bookmarks, notes are kept.",
+    style: "padding: 4px 10px;",
+    onclick: () => resetCardProgress(),
+  }));
+  card.appendChild(header);
 
   // Build the three groups from active questions only.
   const groups = { new: [], learning: [], mastered: [] };
@@ -1897,17 +1906,32 @@ function renderHistoryTab() {
   const w = $el("div");
   if (STATE.sessions.length === 0) {
     w.appendChild($el("div", { class: "small", text: "No sessions yet." }));
-    return w;
+  } else {
+    const ul = $el("ul", { class: "qsublist" });
+    for (const s of STATE.sessions.slice().reverse().slice(0, 30)) {
+      const score = etsScaledScore(s.correct || 0, s.answered || 1);
+      const li = $el("li");
+      li.innerHTML = `<b>${s.startedAt.slice(0, 10)}</b> <span class="pill">${escapeHTML(s.mode)}</span> ` +
+        `${s.correct || 0}/${s.answered || 0} <span class="pill accent">ETS ${score}</span>`;
+      ul.appendChild(li);
+    }
+    w.appendChild(ul);
   }
-  const ul = $el("ul", { class: "qsublist" });
-  for (const s of STATE.sessions.slice().reverse().slice(0, 30)) {
-    const score = etsScaledScore(s.correct || 0, s.answered || 1);
-    const li = $el("li");
-    li.innerHTML = `<b>${s.startedAt.slice(0, 10)}</b> <span class="pill">${escapeHTML(s.mode)}</span> ` +
-      `${s.correct || 0}/${s.answered || 0} <span class="pill accent">ETS ${score}</span>`;
-    ul.appendChild(li);
-  }
-  w.appendChild(ul);
+
+  // Admin section (Steve directive 2026-06-04): Download stats and the
+  // destructive "Erase everything" live here, away from the main UI.
+  const admin = $el("details", { style: "margin-top: 16px;" });
+  admin.appendChild($el("summary", { class: "small", style: "cursor: pointer; opacity: 0.7;",
+    text: "Admin and data" }));
+  const row = $el("div", { class: "row", style: "margin-top: 8px; gap: 8px;" });
+  row.appendChild($el("button", { class: "ghost", text: "Download stats (jsonl)",
+    onclick: () => downloadStats() }));
+  row.appendChild($el("button", { class: "ghost", text: "Erase everything",
+    title: "Permanently delete every record for this profile.",
+    onclick: () => resetProgress() }));
+  admin.appendChild(row);
+  w.appendChild(admin);
+
   return w;
 }
 
@@ -2038,6 +2062,20 @@ function renderQuestion() {
   topicLine.appendChild($el("span", {
     class: "pill " + (h.bucket === "mastered" ? "good" : (h.bucket === "learning" ? "warn" : "")),
     text: h.bucket + (h.bucket === "learning" ? ` (box ${h.leitnerBox})` : ""),
+  }));
+  // Per-question reset right next to the progress pill (Steve directive 2026-06-04).
+  topicLine.appendChild($el("button", {
+    class: "ghost",
+    text: "\u21BA",
+    title: "Reset this question's progress (return to New)",
+    style: "padding: 0 6px; font-size: 0.9em; margin-left: 4px;",
+    onclick: () => {
+      if (!confirm("Reset progress for " + qid + "?\nIt will return to New.")) return;
+      delete STATE.history[qid];
+      STATE.log = STATE.log.filter(r => r.qid !== qid);
+      saveAll();
+      renderQuestion();
+    },
   }));
   headRow.appendChild(topicLine);
 
@@ -2608,11 +2646,9 @@ function endSession(timedOut) {
     (timedOut ? ` <span class="pill bad">time expired</span>` : "")
   }));
 
-  // Sticky-on-top action row so the Home button is reachable without scrolling
-  // past the per-topic and per-question lists (Steve directive 2026-06-04).
+  // Single Home button at the top of the summary (Steve directive 2026-06-04).
   const topActions = $el("div", { class: "row", style: "margin: 10px 0 6px 0;" });
   topActions.appendChild($el("button", { class: "primary", text: "Home", onclick: () => renderHome() }));
-  topActions.appendChild($el("button", { text: "Export PDF", onclick: () => exportSessionPDF(summary) }));
   card.appendChild(topActions);
 
   if (summary.marked.length) {
@@ -2669,13 +2705,7 @@ function endSession(timedOut) {
     card.appendChild(det);
   }
 
-  const row = $el("div", { class: "row", style: "margin-top: 14px;" });
-  row.appendChild($el("button", { class: "primary", text: "Home", onclick: () => renderHome() }));
-  row.appendChild($el("button", { text: "Export to PDF", onclick: () => exportSessionPDF(summary) }));
-  row.appendChild($el("button", { text: "Download stats (jsonl)", onclick: () => downloadStats() }));
-  row.appendChild($el("button", { class: "ghost", text: "Reset cards", title: "Cards return to New. Score chart, sessions, bookmarks, notes are kept.", onclick: () => resetCardProgress() }));
-  row.appendChild($el("button", { class: "ghost", text: "Erase everything", title: "Delete ALL progress, charts, history, bookmarks, notes for this profile.", onclick: () => resetProgress() }));
-  card.appendChild(row);
+
   APP.appendChild(card);
   renderMath(APP);
 }
