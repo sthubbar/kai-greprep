@@ -2556,6 +2556,13 @@ function endSession(timedOut) {
     (timedOut ? ` <span class="pill bad">time expired</span>` : "")
   }));
 
+  // Sticky-on-top action row so the Home button is reachable without scrolling
+  // past the per-topic and per-question lists (Steve directive 2026-06-04).
+  const topActions = $el("div", { class: "row", style: "margin: 10px 0 6px 0;" });
+  topActions.appendChild($el("button", { class: "primary", text: "Home", onclick: () => renderHome() }));
+  topActions.appendChild($el("button", { text: "Export PDF", onclick: () => exportSessionPDF(summary) }));
+  card.appendChild(topActions);
+
   if (summary.marked.length) {
     card.appendChild($el("h3", { text: "Marked for review" }));
     const ul = $el("ul"); for (const id of summary.marked) {
@@ -2584,17 +2591,23 @@ function endSession(timedOut) {
     } card.appendChild(ul);
   }
 
-  // Missed questions.
+  // Missed questions, collapsed by default. On a long session this list can
+  // dominate the summary screen, especially on phones. Steve directive 2026-06-04.
   const missed = sess.ids.filter(id => sess.answers[id] && !sess.answers[id].correct);
   if (missed.length) {
-    card.appendChild($el("h3", { text: "Missed questions" }));
+    const det = $el("details", { style: "margin-top: 10px;" });
+    const sum = $el("summary", { style: "cursor: pointer; font-weight: 600; font-size: 1.05em;",
+      text: `Missed questions (${missed.length})` });
+    det.appendChild(sum);
     const ul = $el("ul", { class: "qsublist" });
     for (const id of missed) {
       const q = STATE.byId[id]; const li = $el("li");
       li.innerHTML = `<b>${id}</b><div class="qmeta">${escapeHTML((q && q.stem || "").slice(0, 200))}</div>` +
         `<div class="qmeta"><b>Why:</b> ${q && q.explanation ? q.explanation : "see explanation in question."}</div>`;
       ul.appendChild(li);
-    } card.appendChild(ul);
+    }
+    det.appendChild(ul);
+    card.appendChild(det);
   }
 
   const row = $el("div", { class: "row", style: "margin-top: 14px;" });
