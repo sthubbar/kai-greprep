@@ -662,23 +662,36 @@ function getH(qid) {
 }
 function recordAttempt(qid, chosenIdx, correct, mode, timeSec) {
   const h = getH(qid);
+  // wasDue gates promotion and the mastery streak (Steve directive 2026-06-04).
+  // Extra practice WITHIN an active Leitner interval still gets logged, but
+  // does not advance the box or count toward Mastered. Otherwise repeating a
+  // card 3 times in one hour would falsely mark it Mastered.
+  const wasDue = (h.attempts === 0) ||
+                 (h.bucket === "new") ||
+                 (h.nextReview == null) ||
+                 (new Date(h.nextReview) <= new Date());
   h.attempts += 1;
   h.lastSeen = nowIso();
   h.lastResult = correct ? "correct" : "wrong";
   if (correct) {
     h.correct += 1;
-    h.streak += 1;
-    if (h.bucket !== "mastered") {
+    if (wasDue && h.bucket !== "mastered") {
+      h.streak += 1;
       if (h.streak >= MASTERY_STREAK) {
         h.bucket = "mastered";
         h.nextReview = null;
       } else {
         h.bucket = "learning";
-        h.leitnerBox = Math.min(h.leitnerBox + 1, LEITNER_INTERVALS_DAYS.length);
+        // Use the CURRENT box's interval, then advance the box. The previous
+        // ordering incremented first, skipping LEITNER_INTERVALS_DAYS[0] (the
+        // 1-day entry) so the first correct landed on a 3-day delay instead.
+        // Steve directive 2026-06-04.
         const days = LEITNER_INTERVALS_DAYS[h.leitnerBox - 1];
         h.nextReview = new Date(Date.now() + dayMs(days)).toISOString();
+        h.leitnerBox = Math.min(h.leitnerBox + 1, LEITNER_INTERVALS_DAYS.length);
       }
     }
+    // If !wasDue: bucket, streak, and nextReview stay where they were.
   } else {
     // Wrong answer. Demote one box (never below 1) and mark due immediately so
     // the question reappears in the very next session, not 24 hours later.
