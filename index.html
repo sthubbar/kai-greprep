@@ -1228,7 +1228,7 @@ function renderMyNotesCard() {
 // ==========================================================================
 // Browse by mastery bucket (home screen card)
 // ==========================================================================
-const MASTERY_BROWSE_OPEN = { new: true, learning: false, mastered: false };
+const MASTERY_BROWSE_OPEN = { new: false, learning: false, mastered: false };
 function renderMasteryBrowserCard() {
   const card = $el("div", { class: "card" });
   card.appendChild($el("h2", { text: "Questions by mastery" }));
