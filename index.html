@@ -1904,34 +1904,34 @@ function renderBookmarksTab() {
 
 function renderHistoryTab() {
   const w = $el("div");
-  if (STATE.sessions.length === 0) {
-    w.appendChild($el("div", { class: "small", text: "No sessions yet." }));
-  } else {
-    const ul = $el("ul", { class: "qsublist" });
-    for (const s of STATE.sessions.slice().reverse().slice(0, 30)) {
-      const score = etsScaledScore(s.correct || 0, s.answered || 1);
-      const li = $el("li");
-      li.innerHTML = `<b>${s.startedAt.slice(0, 10)}</b> <span class="pill">${escapeHTML(s.mode)}</span> ` +
-        `${s.correct || 0}/${s.answered || 0} <span class="pill accent">ETS ${score}</span>`;
-      ul.appendChild(li);
-    }
-    w.appendChild(ul);
-  }
 
-  // Admin section (Steve directive 2026-06-04): Download stats and the
-  // destructive "Erase everything" live here, away from the main UI.
-  const admin = $el("details", { style: "margin-top: 16px;" });
+  // Admin section at the TOP so it stays reachable as the session list grows
+  // (Steve directive 2026-06-04).
+  const admin = $el("details", { style: "margin-bottom: 12px;" });
   admin.appendChild($el("summary", { class: "small", style: "cursor: pointer; opacity: 0.7;",
     text: "Admin and data" }));
-  const row = $el("div", { class: "row", style: "margin-top: 8px; gap: 8px;" });
-  row.appendChild($el("button", { class: "ghost", text: "Download stats (jsonl)",
+  const adminRow = $el("div", { class: "row", style: "margin-top: 8px; gap: 8px;" });
+  adminRow.appendChild($el("button", { class: "ghost", text: "Download stats (jsonl)",
     onclick: () => downloadStats() }));
-  row.appendChild($el("button", { class: "ghost", text: "Erase everything",
+  adminRow.appendChild($el("button", { class: "ghost", text: "Erase everything",
     title: "Permanently delete every record for this profile.",
     onclick: () => resetProgress() }));
-  admin.appendChild(row);
+  admin.appendChild(adminRow);
   w.appendChild(admin);
 
+  if (STATE.sessions.length === 0) {
+    w.appendChild($el("div", { class: "small", text: "No sessions yet." }));
+    return w;
+  }
+  const ul = $el("ul", { class: "qsublist" });
+  for (const s of STATE.sessions.slice().reverse().slice(0, 30)) {
+    const score = etsScaledScore(s.correct || 0, s.answered || 1);
+    const li = $el("li");
+    li.innerHTML = `<b>${s.startedAt.slice(0, 10)}</b> <span class="pill">${escapeHTML(s.mode)}</span> ` +
+      `${s.correct || 0}/${s.answered || 0} <span class="pill accent">ETS ${score}</span>`;
+    ul.appendChild(li);
+  }
+  w.appendChild(ul);
   return w;
 }
 
