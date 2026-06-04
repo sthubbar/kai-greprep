@@ -2100,7 +2100,7 @@ function renderQuestion() {
     const fb = $el("div", { class: "feedback " + (ans.correct ? "good" : "bad") });
     fb.innerHTML = (ans.correct
       ? "Correct."
-      : `Not quite. Correct answer: <strong>${letters[q.answer]}</strong>.`);
+      : `Not quite. The correct answer is highlighted.`);
     if (q.explanation) {
       const exp = $el("div", { style: "margin-top: 6px;" });
       exp.innerHTML = safeMathHTML(q.explanation);
@@ -2476,7 +2476,7 @@ function renderGeneratedMiniQuiz(qid) {
     } else {
       const fb = $el("div", { class: "feedback " + (g.chosen === g.correct_answer ? "good" : "bad") });
       fb.innerHTML = (g.chosen === g.correct_answer ? "Correct." :
-        `Not quite. Correct: <b>${letters[g.correct_answer]}</b>.`) +
+        `Not quite. The correct answer is highlighted.`) +
         (g.explanation ? `<div style="margin-top:6px;">${safeMathHTML(g.explanation)}</div>` : "");
       card.appendChild(fb);
     }
