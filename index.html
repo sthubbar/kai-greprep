@@ -226,13 +226,18 @@ const HEALTH_URL = "/.netlify/functions/health";
 const GENERATE_URL = "/.netlify/functions/generate";
 const PATTERN_URL = "/.netlify/functions/pattern";
 
-// Leitner interval ladder, in DAYS. The Nth entry is the delay applied when a
-// question is promoted into box N (1-indexed). A correct answer in box K sets
-// next_review = now + LEITNER_INTERVALS_DAYS[K-1] days.
-const LEITNER_INTERVALS_DAYS = [1, 3, 7, 14, 30];
-// After this many consecutive correct answers, a question exits Learning into
-// Mastered and stops appearing in normal selection.
-const MASTERY_STREAK = 4;  // new -> box 1 -> box 2 -> box 3 -> mastered
+// Leitner interval ladder, in DAYS. Visible "Learning" tier. A correct answer
+// when due advances the box; the new box's interval is the next nextReview.
+const LEITNER_INTERVALS_DAYS = [1, 3, 7];
+// After this many consecutive correct-when-due answers, a question exits
+// Learning into Mastered. The visible path is new -> box 1 -> box 2 -> box 3
+// -> Mastered, taking around 11 days at the minimum cadence.
+const MASTERY_STREAK = 4;
+// Hidden "Mastered" refresh ladder, in DAYS. Once a question is Mastered the
+// scheduler keeps it on a much longer rotation, so long-term retention does
+// not silently rot. The user does not see which sub-tier a Mastered card sits
+// in; they only see the "Mastered" label. Steve directive 2026-06-04.
+const MASTERED_REFRESH_INTERVALS_DAYS = [14, 30, 90];
 
 // Rule-recall Leitner.
 const RULE_BOX_MAX = 5;
@@ -651,7 +656,7 @@ function showModal(title, contentNode, buttons) {
 function defaultHistory(qid) {
   return {
     id: qid, attempts: 0, correct: 0, streak: 0,
-    bucket: "new", leitnerBox: 0, lastSeen: null, lastResult: null,
+    bucket: "new", leitnerBox: 0, masteredBox: 0, lastSeen: null, lastResult: null,
     nextReview: nowIso(),
   };
 }
@@ -674,30 +679,43 @@ function recordAttempt(qid, chosenIdx, correct, mode, timeSec) {
   h.lastResult = correct ? "correct" : "wrong";
   if (correct) {
     h.correct += 1;
-    if (wasDue && h.bucket !== "mastered") {
+    if (h.bucket === "mastered") {
+      // Hidden refresh ladder. Only advance when the refresh interval has
+      // elapsed (wasDue). Extra practice on a Mastered card does nothing.
+      if (wasDue) {
+        h.masteredBox = Math.min((h.masteredBox || 0) + 1, MASTERED_REFRESH_INTERVALS_DAYS.length);
+        const days = MASTERED_REFRESH_INTERVALS_DAYS[h.masteredBox - 1];
+        h.nextReview = new Date(Date.now() + dayMs(days)).toISOString();
+      }
+    } else if (wasDue) {
+      // Learning tier promotion path.
       h.streak += 1;
       if (h.streak >= MASTERY_STREAK) {
+        // Enter Mastered. Schedule first hidden refresh.
         h.bucket = "mastered";
-        h.nextReview = null;
+        h.masteredBox = 1;
+        const days = MASTERED_REFRESH_INTERVALS_DAYS[0];
+        h.nextReview = new Date(Date.now() + dayMs(days)).toISOString();
       } else {
         h.bucket = "learning";
         // Advance the box FIRST, then use the new box's interval. A brand-new
         // question (leitnerBox 0) goes to box 1 with INTERVALS[0] = 1 day on
-        // its first correct. Steve directive 2026-06-04 (round 2).
+        // its first correct.
         h.leitnerBox = Math.min(h.leitnerBox + 1, LEITNER_INTERVALS_DAYS.length);
         const days = LEITNER_INTERVALS_DAYS[h.leitnerBox - 1];
         h.nextReview = new Date(Date.now() + dayMs(days)).toISOString();
       }
     }
-    // If !wasDue: bucket, streak, and nextReview stay where they were.
+    // If !wasDue and not mastered: nothing changes. Extra practice on a card
+    // inside its Learning interval is welcomed but does not advance the box.
   } else {
-    // Wrong answer. Demote one box (never below 1) and mark due immediately so
-    // the question reappears in the very next session, not 24 hours later.
-    // This matches Steve's spaced-repetition expectation (2026-06-02): missed
-    // questions should be drilled now, recently-correct ones should rest.
+    // Wrong answer. Demote one box (never below 1) and mark due immediately.
+    // A Mastered card that was missed goes back to Learning and the hidden
+    // refresh counter resets.
     h.streak = 0;
     h.bucket = "learning";
-    h.leitnerBox = Math.max(1, h.leitnerBox - 1);
+    h.leitnerBox = Math.max(1, (h.leitnerBox || 0) - 1);
+    h.masteredBox = 0;
     h.nextReview = nowIso();
   }
   STATE.log.push({ qid, ts: nowIso(), mode, chosen: chosenIdx, correct: !!correct, time_sec: timeSec });
@@ -707,7 +725,12 @@ function recordAttempt(qid, chosenIdx, correct, mode, timeSec) {
 function classify(qid) {
   const h = STATE.history[qid];
   if (!h || h.attempts === 0) return "new";
-  if (h.bucket === "mastered") return "mastered";
+  // Mastered + due_for_refresh: surface as review_due so the selector pulls it.
+  // Mastered + not yet due for refresh: stays "mastered" (out of normal rotation).
+  if (h.bucket === "mastered") {
+    if (h.nextReview && new Date(h.nextReview) <= new Date()) return "review_due";
+    return "mastered";
+  }
   if (h.bucket === "learning" && h.nextReview && new Date(h.nextReview) <= new Date()) return "review_due";
   return "learning_not_due";
 }
