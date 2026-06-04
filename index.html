@@ -2583,12 +2583,19 @@ function endSession(timedOut) {
     }
   }
   if (Object.keys(byTopic).length) {
-    card.appendChild($el("h3", { text: "Topic breakdown" }));
+    // Collapse Topic breakdown like Missed questions, so the summary stays
+    // compact on phone. Steve directive 2026-06-04.
+    const det = $el("details", { style: "margin-top: 10px;" });
+    const sum = $el("summary", { style: "cursor: pointer; font-weight: 600; font-size: 1.05em;",
+      text: `Topic breakdown (${Object.keys(byTopic).length})` });
+    det.appendChild(sum);
     const ul = $el("ul");
     for (const [t, v] of Object.entries(byTopic).sort()) {
       const li = $el("li", { html: `<b>${t}</b>: ${v.c}/${v.n}` });
       ul.appendChild(li);
-    } card.appendChild(ul);
+    }
+    det.appendChild(ul);
+    card.appendChild(det);
   }
 
   // Missed questions, collapsed by default. On a long session this list can
