@@ -998,7 +998,7 @@
       "linear_algebra"
     ],
     "difficulty": "medium",
-    "stem": "For the matrix \\(\\begin{pmatrix}1+x & x & 1 \\\\ 0 & 1+x^2 & -x \\\\ 0 & 0 & 1-x\\end{pmatrix}\\), \\(x\\in\\mathbb{R}\\). For how many distinct \\(x\\) is the matrix noninvertible?",
+    "stem": "For the matrix \\(\\begin{pmatrix}1+x & x & 1 \\\\ 0 & 1+x^2 & -x \\\\ 0 & 0 & 1-x\\end{pmatrix}\\), \\(x\\in\\mathbb{C}\\). For how many distinct values of \\(x\\) is the matrix noninvertible?",
     "options": [
       "None",
       "One",
@@ -1007,10 +1007,10 @@
       "Four"
     ],
     "answer": 4,
-    "explanation": "Det = \\((1+x)(1+x^2)(1-x) = (1-x^2)(1+x^2) = 1-x^4\\). Zero when \\(x^4 = 1\\), i.e. \\(x = \\pm 1\\) over \\(\\mathbb{R}\\). Wait, \\(x = 1, -1\\) gives 2 real solutions. But the published key is E (Four). Reading again: the matrix is upper triangular, so det = product of diagonal: \\((1+x)(1+x^2)(1-x)\\). Real roots: \\(x = 1, -1\\) (real), and \\(1+x^2=0\\) has no real roots. So only 2 real values. (E=Four is the published answer; this likely refers to the underlying polynomial roots in \\(\\mathbb{C}\\): \\(x = \\pm 1, \\pm i\\), so 4 distinct complex values.)",
+    "explanation": "The matrix is upper triangular, so its determinant is the product of the diagonal entries: \\((1+x)(1+x^2)(1-x)\\). The matrix is noninvertible exactly when this is zero: \\(x=-1\\), \\(x=\\pm i\\) (from \\(1+x^2=0\\)), and \\(x=1\\). Since \\(x\\) ranges over \\(\\mathbb{C}\\), all four roots count, giving four distinct values. Answer (E). (Note: over \\(\\mathbb{R}\\) only \\(\\pm 1\\) would qualify; the problem specifies \\(x\\in\\mathbb{C}\\).)",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": [
       "linear algebra",
       "determinants"
