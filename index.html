@@ -182,7 +182,6 @@
 <header>
   <div>
     <h1>GRE Math Subject Test, adaptive practice</h1>
-    <div class="sub">Phase 2: profiles, chat tutor, timed modes, heatmap, patterns.</div>
   </div>
   <div class="profile-tag" id="profile-tag"></div>
 </header>
@@ -1279,16 +1278,19 @@ function renderMasteryBrowserCard() {
 // F1: Topic-filter chip control
 // ==========================================================================
 function renderTopicFilter() {
+  // Collapse the topic-filter chips by default (Steve directive 2026-06-04).
+  // The status label is the summary; chips appear when expanded.
   const wrap = $el("div", { style: "margin-top: 12px;" });
-  const lbl = $el("div", { class: "small" });
-  lbl.innerHTML = "Topic filter: " +
+  const det = $el("details");
+  const sum = $el("summary", { class: "small", style: "cursor: pointer;" });
+  sum.innerHTML = "Topic filter: " +
     (STATE.topicFilter && STATE.topicFilter.length > 0
       ? `<b>${STATE.topicFilter.length}</b> selected (sessions restricted)`
-      : "<b>All topics</b> (no filter)");
-  wrap.appendChild(lbl);
+      : "<b>All topics</b> (no filter)") +
+    ' <span class="small" style="opacity:0.7;">(tap to change)</span>';
+  det.appendChild(sum);
 
-  const chips = $el("div", { class: "topic-chips" });
-  // "All topics" chip clears the filter.
+  const chips = $el("div", { class: "topic-chips", style: "margin-top: 6px;" });
   const allChip = $el("div", {
     class: "topic-chip allchip" + ((!STATE.topicFilter || STATE.topicFilter.length === 0) ? " selected" : ""),
     text: "All topics",
@@ -1311,7 +1313,8 @@ function renderTopicFilter() {
     });
     chips.appendChild(chip);
   }
-  wrap.appendChild(chips);
+  det.appendChild(chips);
+  wrap.appendChild(det);
   return wrap;
 }
 
