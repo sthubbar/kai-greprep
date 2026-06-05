@@ -7667,10 +7667,10 @@
       "21"
     ],
     "answer": 3,
-    "explanation": "The supremum equals the total variation of $f$ over [0,12]. Reading from the graph: rise 0 to 3, drop 3 to -2, rise -2 to 5, drop 5 to 3, giving 3 + 5 + 7 + 2 = 16.",
+    "explanation": "The supremum equals the total variation of $f$ over [0,12]. Reading from the graph: rise 1 to 3, drop 3 to -2, rise -2 to 5, drop 5 to 3, giving 2 + 5 + 7 + 2 = 16.",
     "image": "images/gr8767_q59_crop.jpg",
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": []
   },
   {
