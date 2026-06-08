@@ -823,10 +823,10 @@
       "\\(\\{a+bi: a,b\\in\\mathbb{R},\\ a^2+b^2 = 1\\}\\)"
     ],
     "answer": 0,
-    "explanation": "In (A), set is not closed: \\((1+i)(1+i) = 2i\\), but \\(0\\) is not positive rational, so \\(2i\\) has \\(a=0\\), violating positivity. Also no inverses in general.",
+    "explanation": "In the set \\(\\{a+bi: a,b\\in\\mathbb{Q}_{>0}\\}\\), the set is not closed: \\((1+i)(1+i) = 2i\\), but \\(2i\\) has \\(a=0\\), which is not a positive rational, violating positivity. Also no inverses in general.",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": [
       "abstract algebra",
       "groups",
@@ -930,10 +930,10 @@
       "I, II, and III"
     ],
     "answer": 0,
-    "explanation": "\\(S\\) could be \\((0,1)\\), open interval, so I fails. \\(f(x)=1/(x(1-x))\\) on \\((0,1)\\) is unbounded, so II fails. But for the GRE key III is the answer? Actually the key is (A) None: bounded but \\(f\\) need not be bounded if \\(S\\) is open. \\(f(S)\\) need not even have a sup if \\(f\\) is unbounded above. So III also fails for some \\(f\\). Answer is None.",
+    "explanation": "\\(S\\) could be \\((0,1)\\), an open interval, so I fails. \\(f(x)=1/(x(1-x))\\) on \\((0,1)\\) is unbounded, so II fails. The correct key is None: \\(f\\) need not be bounded if \\(S\\) is open, and \\(f(S)\\) need not even have a sup if \\(f\\) is unbounded above, so III also fails for some \\(f\\). The answer is None.",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": [
       "real analysis",
       "topology",
@@ -956,10 +956,10 @@
       "\\(\\tfrac{56}{14}\\)"
     ],
     "answer": 2,
-    "explanation": "Cauchy-Schwarz: max of \\(x-3y+2z\\) on the sphere of radius 3 is \\(3\\sqrt{1+9+4} = 3\\sqrt{14}\\). The published key is (C); ETS lists option C as that value.",
+    "explanation": "Cauchy-Schwarz: max of \\(x-3y+2z\\) on the sphere of radius 3 is \\(3\\sqrt{1+9+4} = 3\\sqrt{14}\\). The published key is \\(3\\sqrt{14}\\); ETS lists that value as the correct option.",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": [
       "multivariable calculus",
       "Lagrange multipliers"
@@ -1007,10 +1007,10 @@
       "Four"
     ],
     "answer": 4,
-    "explanation": "The matrix is upper triangular, so its determinant is the product of the diagonal entries: \\((1+x)(1+x^2)(1-x)\\). The matrix is noninvertible exactly when this is zero: \\(x=-1\\), \\(x=\\pm i\\) (from \\(1+x^2=0\\)), and \\(x=1\\). Since \\(x\\) ranges over \\(\\mathbb{C}\\), all four roots count, giving four distinct values. Answer (E). (Note: over \\(\\mathbb{R}\\) only \\(\\pm 1\\) would qualify; the problem specifies \\(x\\in\\mathbb{C}\\).)",
+    "explanation": "The matrix is upper triangular, so its determinant is the product of the diagonal entries: \\((1+x)(1+x^2)(1-x)\\). The matrix is noninvertible exactly when this is zero: \\(x=-1\\), \\(x=\\pm i\\) from \\(1+x^2=0\\), and \\(x=1\\). Since \\(x\\) ranges over \\(\\mathbb{C}\\), all four roots count, giving four distinct values, so the answer is four. Over \\(\\mathbb{R}\\) only \\(\\pm 1\\) would qualify; the problem specifies \\(x\\in\\mathbb{C}\\).",
     "image": null,
     "status": "active",
-    "version": 2,
+    "version": 3,
     "topics_legacy": [
       "linear algebra",
       "determinants"
@@ -2315,10 +2315,10 @@
       "\\(\\{(x, y, z) : x - 2y - z = -7\\}\\)"
     ],
     "answer": 3,
-    "explanation": "Subtracting the equations: \\(-x + 2y + z = 7\\). Try \\(t = 0\\): \\((0, 3, 1)\\) satisfies both planes. Direction is the cross product of normals \\((1,3,-2) \\times (2,1,-3) = (-7, -1, -5)\\), parallel to \\((7, 1, 5)\\). Matches choice D.",
+    "explanation": "Subtracting the equations: \\(-x + 2y + z = 7\\). Try \\(t = 0\\): \\((0, 3, 1)\\) satisfies both planes. Direction is the cross product of normals \\((1,3,-2) \\times (2,1,-3) = (-7, -1, -5)\\), parallel to \\((7, 1, 5)\\). This matches the parametrization \\(x = 7t,\\ y = 3 + t,\\ z = 1 + 5t\\).",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": []
   },
   {
@@ -2524,10 +2524,10 @@
       "\\(f(f^{-1}(D)) = f^{-1}(D)\\)"
     ],
     "answer": 0,
-    "explanation": "For any \\(c \\in C\\), \\(f(c) \\in f(C)\\), so \\(c \\in f^{-1}(f(C))\\). The reverse containment fails when \\(f\\) is not injective; B fails when \\(D\\) contains points not in the image.",
+    "explanation": "For any \\(c \\in C\\), \\(f(c) \\in f(C)\\), so \\(c \\in f^{-1}(f(C))\\), which makes \\(C \\subseteq f^{-1}(f(C))\\) the correct statement. The reverse containment \\(f^{-1}(f(C)) \\subseteq C\\) fails when \\(f\\) is not injective; \\(D \\subseteq f(f^{-1}(D))\\) fails when \\(D\\) contains points not in the image.",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": [
       "set_theory"
     ]
@@ -2999,10 +2999,10 @@
       "The set of all polynomials with coefficients in \\(\\mathbb{R}\\)"
     ],
     "answer": 2,
-    "explanation": "(C) has cardinality \\(2^{|\\mathbb{R}|} = 2^{\\mathfrak{c}}\\), strictly larger than the continuum. The others all have cardinality \\(\\mathfrak{c} = |\\mathbb{R}|\\).",
+    "explanation": "The set of all functions from \\(\\mathbb{R}\\) to \\(\\{0, 1\\}\\) has cardinality \\(2^{|\\mathbb{R}|} = 2^{\\mathfrak{c}}\\), strictly larger than the continuum. The others all have cardinality \\(\\mathfrak{c} = |\\mathbb{R}|\\).",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": [
       "set_theory"
     ]
@@ -3722,10 +3722,10 @@
       "\\(\\{(0, 0, 0, 0), (-1, 1, 0, -1), (0, 1, -1, 0)\\}\\)"
     ],
     "answer": 2,
-    "explanation": "Orthogonal complement of two linearly independent vectors in \\(\\mathbb{R}^4\\) is 2-dimensional. (C) gives two orthogonal, linearly independent vectors.",
+    "explanation": "Orthogonal complement of two linearly independent vectors in \\(\\mathbb{R}^4\\) is 2-dimensional. The set \\(\\{(-2, 1, 1, -2), (0, 1, -1, 0)\\}\\) gives two orthogonal, linearly independent vectors that span this complement.",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": []
   },
   {
@@ -3855,10 +3855,10 @@
       "One of the vectors in \\(B\\) is a linear combination of the other vectors in \\(B\\)."
     ],
     "answer": 3,
-    "explanation": "All except (D) contradict the definition of basis. Disjoint bases exist.",
+    "explanation": "All the other statements contradict the definition of a basis; only the existence of a basis for \\(V\\) that is disjoint from \\(B\\) can be true. Disjoint bases exist.",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": []
   },
   {
@@ -4033,10 +4033,10 @@
       "\\(\\displaystyle\\int_0^{\\pi/4} \\sin t \\cos t\\, dt\\)"
     ],
     "answer": 1,
-    "explanation": "(B) \\(= \\sin(\\pi/4) = \\sqrt{2}/2 \\approx 0.707\\), the largest among the five.",
+    "explanation": "The integral \\(\\int_0^{\\pi/4}\\cos t\\,dt = \\sin(\\pi/4) = \\sqrt{2}/2 \\approx 0.707\\), the largest among the five.",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": []
   },
   {
@@ -4056,10 +4056,10 @@
       "\\(0\\)"
     ],
     "answer": 1,
-    "explanation": "Since \\(e^{-x}\\) is decreasing and convex, the left Riemann sum (B) overestimates the integral the most.",
+    "explanation": "Since \\(e^{-x}\\) is decreasing and convex, the left Riemann sum overestimates the integral the most.",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": []
   },
   {
@@ -4167,10 +4167,10 @@
       "The derivative \\(f'(x)\\) is increasing for all \\(x > 0\\)."
     ],
     "answer": 3,
-    "explanation": "\\(f(x) = x^{x/2}\\). \\(f'(x) = f(x)(1+\\log x)/2\\). As \\(x \\to 0^+\\), \\(\\log x \\to -\\infty\\), so \\(f'(x) < 0\\). (D) is false.",
+    "explanation": "\\(f(x) = x^{x/2}\\), so \\(f'(x) = f(x)(1+\\log x)/2\\). As \\(x \\to 0^+\\), \\(\\log x \\to -\\infty\\), so \\(f'(x) < 0\\). Therefore the claim that \\(f'(x)\\) is positive for all \\(x>0\\) is false.",
     "image": null,
     "status": "active",
-    "version": 1,
+    "version": 2,
     "topics_legacy": []
   },
   {
