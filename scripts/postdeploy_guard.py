@@ -43,6 +43,8 @@ def healthy(name, body):
             return False, "empty array"
         return True, "json ok"
     if name.endswith(".html"):
+        if len(body) < 1000:
+            return False, "html too small (%d bytes)" % len(body)
         if b"</html>" not in body[-300:]:
             return False, "html does not end with </html> (truncated?)"
         return True, "html ok"
@@ -55,9 +57,19 @@ def expected_hashes(repo, assets):
             out[a] = md5_bytes(f.read())
     return out
 
-def verify(url, repo, assets, timeout, label):
-    """Poll until every asset on the live site matches the repo md5 + is healthy."""
-    expect = expected_hashes(repo, assets)
+def verify(url, repo, assets, markers, timeout, label):
+    """Poll until the live site reflects the committed deploy.
+
+    Verification is per-asset by intent, because a CDN may legitimately rewrite
+    some files (e.g. Netlify rewrites its own <form netlify> tag, so live HTML
+    never byte-matches the repo):
+      - .json  -> must byte-match the repo md5 (JSON is served untouched).
+      - .html  -> must be healthy (ends with </html>, non-trivial size) and
+                  contain every required marker substring. No md5, to tolerate
+                  CDN HTML rewrites.
+      - other  -> health check only.
+    """
+    expect = expected_hashes(repo, [a for a in assets if a.endswith(".json")])
     deadline = time.time() + timeout
     last = {}
     while time.time() < deadline:
@@ -68,13 +80,22 @@ def verify(url, repo, assets, timeout, label):
             except Exception as e:
                 ok = False; last[a] = "fetch error: %s" % e; continue
             h_ok, h_msg = healthy(a, body)
-            live = md5_bytes(body)
             if not h_ok:
                 ok = False; last[a] = "unhealthy: %s" % h_msg
-            elif live != expect[a]:
-                ok = False; last[a] = "md5 mismatch (live %s != repo %s)" % (live[:8], expect[a][:8])
+            elif a.endswith(".json"):
+                live = md5_bytes(body)
+                if live != expect[a]:
+                    ok = False; last[a] = "md5 mismatch (live %s != repo %s)" % (live[:8], expect[a][:8])
+                else:
+                    last[a] = "md5 match"
+            elif a.endswith(".html"):
+                missing = [m for m in markers if m.encode() not in body]
+                if missing:
+                    ok = False; last[a] = "missing markers %s" % missing
+                else:
+                    last[a] = "healthy+markers" if markers else "healthy"
             else:
-                last[a] = "match"
+                last[a] = "healthy"
         print("[%s] %s" % (label, ", ".join("%s=%s" % (a, last[a]) for a in assets)))
         if ok:
             return True
@@ -104,11 +125,13 @@ def main():
     ap.add_argument("--repo", default=".")
     ap.add_argument("--assets", nargs="+", default=["questions.json", "index.html"])
     ap.add_argument("--timeout", type=int, default=180)
+    ap.add_argument("--markers", nargs="*", default=[],
+                    help="substrings that must appear in live HTML assets")
     args = ap.parse_args()
     repo = os.path.abspath(args.repo)
 
     print("== VERIFY deploy ==")
-    if verify(args.url, repo, args.assets, args.timeout, "verify"):
+    if verify(args.url, repo, args.assets, args.markers, args.timeout, "verify"):
         print("RESULT: deploy verified live. OK.")
         return 0
 
@@ -124,7 +147,7 @@ def main():
     print("== RE-VERIFY ROLLBACK ==")
     # after revert, the repo working tree IS the previous-good state, so the same
     # md5 verify against the (now reverted) repo copies confirms the restore.
-    if verify(args.url, repo, args.assets, args.timeout, "rollback-verify"):
+    if verify(args.url, repo, args.assets, args.markers, args.timeout, "rollback-verify"):
         print("RESULT: deploy failed but ROLLBACK CONFIRMED live. Site restored.")
         return 2
     print("RESULT: CRITICAL. Rollback could NOT be confirmed live. Human needed.")
