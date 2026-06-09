@@ -173,10 +173,10 @@
       "\\(\\infty\\)"
     ],
     "answer": 1,
-    "explanation": "Write \\(\\left(1+\\frac{x}{a}\\right)^{b/x} = e^{(b/x)\\ln(1+x/a)}\\). As \\(x\\to 0\\), \\(\\ln(1+x/a) \\sim x/a\\), so the exponent \\(\\frac{b}{x}\\cdot\\frac{x}{a} \\to \\frac{b}{a}\\). The limit is \\(e^{b/a}\\), answer (B). (Equivalently, substitute \\(t = x/a \\to 0\\): \\((1+t)^{(b/a)/t} \\to e^{b/a}\\).)",
+    "explanation": "Write \\(\\left(1+\\frac{x}{a}\\right)^{b/x} = e^{(b/x)\\ln(1+x/a)}\\). As \\(x\\to 0\\), \\(\\ln(1+x/a) \\sim x/a\\), so the exponent \\(\\frac{b}{x}\\cdot\\frac{x}{a} \\to \\frac{b}{a}\\). The limit is \\(e^{b/a}\\). Equivalently, substitute \\(t = x/a \\to 0\\): \\((1+t)^{(b/a)/t} \\to e^{b/a}\\).",
     "image": null,
     "status": "active",
-    "version": 2,
+    "version": 3,
     "topics_legacy": [
       "calculus",
       "limits",
