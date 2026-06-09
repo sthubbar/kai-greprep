@@ -2130,8 +2130,13 @@ function renderQuestion() {
   if (!sess.shuffles) sess.shuffles = {};
   let order = sess.shuffles[qid];
   if (!order || order.length !== q.options.length) {
-    const letterLabeled =
-      q.options.filter((o) => /^\s*\(([A-E])\)/.test(o)).length >= 3;
+    // Letter-keyed figure question: has an image and >=3 options are
+    // positional labels "(A)".."(E)" or "Graph A".."Graph E". Keep identity
+    // order so display letters match the panel labels in the image.
+    const _LBL = ["A", "B", "C", "D", "E"];
+    const letterLabeled = !!q.image && q.options.filter((o, k) =>
+      k < 5 && new RegExp("^\\s*(?:graph|figure|option|choice)?\\s*[(]?" + _LBL[k] + "[).:]?(\\s|$)", "i").test(o)
+    ).length >= 3;
     order = q.options.map((_, i) => i);
     if (!letterLabeled) {
       for (let i = order.length - 1; i > 0; i--) {
