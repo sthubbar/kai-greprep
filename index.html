@@ -1338,10 +1338,14 @@ function renderMasteryBrowserCard() {
 // F1: Topic-filter chip control
 // ==========================================================================
 function renderTopicFilter() {
-  // Collapse the topic-filter chips by default (Steve directive 2026-06-04).
-  // The status label is the summary; chips appear when expanded.
+  // Collapsed by default, but stays open across chip clicks so several topics
+  // can be picked in one go (Steve 2026-06-07). Chips are the topics actually
+  // present in the loaded bank, so every question is reachable and "All topics"
+  // equals selecting every chip.
   const wrap = $el("div", { style: "margin-top: 12px;" });
   const det = $el("details");
+  det.open = !!STATE.topicFilterOpen;
+  det.addEventListener("toggle", () => { STATE.topicFilterOpen = det.open; });
   const sum = $el("summary", { class: "small", style: "cursor: pointer;" });
   sum.innerHTML = "Topic filter: " +
     (STATE.topicFilter && STATE.topicFilter.length > 0
@@ -1350,14 +1354,21 @@ function renderTopicFilter() {
     ' <span class="small" style="opacity:0.7;">(tap to change)</span>';
   det.appendChild(sum);
 
+  // Build the chip list from topics that actually appear in the bank: canonical
+  // order first, then any extras, so no question is hidden from the filter.
+  const present = new Set();
+  for (const q of activeQuestions()) for (const t of (q.topics || [])) present.add(t);
+  const extras = Array.from(present).filter(t => !CANONICAL_TOPICS.includes(t)).sort();
+  const topicList = CANONICAL_TOPICS.filter(t => present.has(t)).concat(extras);
+
   const chips = $el("div", { class: "topic-chips", style: "margin-top: 6px;" });
   const allChip = $el("div", {
     class: "topic-chip allchip" + ((!STATE.topicFilter || STATE.topicFilter.length === 0) ? " selected" : ""),
     text: "All topics",
-    onclick: () => { STATE.topicFilter = []; saveAll(); renderHome(); },
+    onclick: () => { STATE.topicFilter = []; STATE.topicFilterOpen = true; saveAll(); renderHome(); },
   });
   chips.appendChild(allChip);
-  for (const t of CANONICAL_TOPICS) {
+  for (const t of topicList) {
     const sel = (STATE.topicFilter || []).includes(t);
     const chip = $el("div", {
       class: "topic-chip" + (sel ? " selected" : ""),
@@ -1367,6 +1378,7 @@ function renderTopicFilter() {
         const idx = f.indexOf(t);
         if (idx >= 0) f.splice(idx, 1); else f.push(t);
         STATE.topicFilter = f;
+        STATE.topicFilterOpen = true;
         saveAll();
         renderHome();
       },
