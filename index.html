@@ -766,8 +766,10 @@ function filteredActiveQuestions(filterArr) {
   return activeQuestions().filter(q => matchesTopicFilter(q, filterArr));
 }
 function bucketCounts() {
+  // Counters follow the active topic filter so they match what a session draws.
+  // Identical to the whole bank when no filter is set.
   const out = { new: 0, review_due: 0, learning_not_due: 0, mastered: 0 };
-  for (const q of activeQuestions()) out[classify(q.id)] += 1;
+  for (const q of filteredActiveQuestions()) out[classify(q.id)] += 1;
   return out;
 }
 
