@@ -3601,7 +3601,7 @@
       "numerical_analysis"
     ],
     "difficulty": "medium",
-    "stem": "Let \\(f\\) be a function with \\(f(1) = -1\\), \\(\\Delta f(1) = 4\\), \\(\\Delta f(2) = -2\\), and \\(\\Delta^2 f(2) = 6\\), where \\(\\Delta f(n) = f(n+1) - f(n)\\). What is \\(\\Delta^3 f(1)\\)?",
+    "stem": "Let \\(f\\) be a function with finite differences \\(\\Delta f(n) = f(n+1) - f(n)\\) and \\(\\Delta^2 f(n) = \\Delta f(n+1) - \\Delta f(n)\\). Given \\(f(1) = -1\\), \\(\\Delta f(1) = 4\\), \\(\\Delta f(2) = -2\\), and \\(\\Delta^2 f(2) = 6\\), what is the value of \\(f(4)\\)?",
     "options": [
       "\\(-5\\)",
       "\\(-1\\)",
@@ -3610,10 +3610,10 @@
       "\\(5\\)"
     ],
     "answer": 4,
-    "explanation": "Using the difference table relations and the given values, \\(\\Delta f(3) = 4\\) and \\(f(4) = f(1) + \\Delta f(1) + \\Delta f(2) + \\Delta f(3) = 5\\).",
+    "explanation": "From \\(\\Delta^2 f(2) = \\Delta f(3) - \\Delta f(2) = 6\\) we get \\(\\Delta f(3) = 6 + (-2) = 4\\). Then \\(f(4) = f(1) + \\Delta f(1) + \\Delta f(2) + \\Delta f(3) = -1 + 4 + (-2) + 4 = 5\\).",
     "image": null,
     "status": "active",
-    "version": 2,
+    "version": 3,
     "topics_legacy": []
   },
   {
