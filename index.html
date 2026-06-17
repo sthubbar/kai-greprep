@@ -167,7 +167,7 @@
      The build crawler picks this up so submissions are accepted.
      Steve must enable Forms notifications in the Netlify dashboard
      to receive emails at sthubbar@gmail.com. -->
-<form name="question-error" netlify netlify-honeypot="bot-field" hidden>
+<form hidden method='post' name='question-error'>
   <input type="hidden" name="form-name" value="question-error" />
   <input type="text" name="bot-field" />
   <input type="text" name="qid" />
@@ -1120,6 +1120,13 @@ function renderHome() {
   }
   modeCard.appendChild(practiceRow);
 
+  // Erik i: option to disable the pacing light to mimic the real test.
+  const pacingRow = $el("div", { class: "row", style: "margin-top: 8px;" });
+  pacingRow.appendChild($el("span", { class: "small", text: "Pacing light: " }));
+  pacingRow.appendChild($el("button", { class: STATE.settings.pacingOff ? "" : "primary", text: "On", onclick: () => { STATE.settings.pacingOff = false; saveAll(); renderHome(); } }));
+  pacingRow.appendChild($el("button", { class: STATE.settings.pacingOff ? "primary" : "", text: "Off", onclick: () => { STATE.settings.pacingOff = true; saveAll(); renderHome(); } }));
+  modeCard.appendChild(pacingRow);
+
   // F1: topic filter chips.
   modeCard.appendChild(renderTopicFilter());
 
@@ -1185,6 +1192,30 @@ function renderHome() {
 // ==========================================================================
 // One-question review session (entry point used by Notes view and Mastery browser)
 // ==========================================================================
+function previewQuestion(qid) {
+  // Erik vi: view a question read-only, no session, no attempt recorded. Never writes history.
+  const q = STATE.byId[qid];
+  if (!q) { alert("Question " + qid + " not found."); return; }
+  const wrap = $el("div");
+  wrap.appendChild($el("div", { class: "small", style: "margin-bottom:6px;", html: "<b>" + escapeHTML(qid) + "</b> preview. Read-only, nothing is recorded." }));
+  const stem = $el("div", { style: "margin:8px 0;" }); stem.innerHTML = safeMathHTML(q.stem || "");
+  wrap.appendChild(stem);
+  (q.options || []).forEach(function(o, i) {
+    const correct = (i === q.answer);
+    const row = $el("div", { style: "margin:4px 0;" + (correct ? "font-weight:600;color:var(--good);" : "") });
+    row.innerHTML = (correct ? "\u2713 " : "&nbsp;&nbsp;&nbsp;") + safeMathHTML(o);
+    wrap.appendChild(row);
+  });
+  if (q.explanation) {
+    const exp = $el("div", { class: "small", style: "margin-top:10px;" });
+    exp.innerHTML = "<b>Explanation:</b> " + safeMathHTML(q.explanation);
+    wrap.appendChild(exp);
+  }
+  const p = showModal("Preview " + qid, wrap, [{ label: "Close", value: null, primary: true }]);
+  setTimeout(function(){ renderMath(wrap); }, 30);
+  return p;
+}
+
 function startSingleQuestionReview(qid) {
   const q = STATE.byId[qid];
   if (!q) { alert("Question " + qid + " not found."); return; }
@@ -1310,6 +1341,13 @@ function renderMasteryBrowserCard() {
             text: id,
             onclick: () => startSingleQuestionReview(id),
             style: "padding: 4px 8px;",
+          }));
+          group.appendChild($el("button", {
+            class: "ghost",
+            text: "\uD83D\uDC41",
+            title: "Preview, read-only, not recorded",
+            onclick: () => previewQuestion(id),
+            style: "padding: 4px 6px;",
           }));
           group.appendChild($el("button", {
             class: "ghost",
@@ -2048,8 +2086,7 @@ function renderQuestion() {
     const dot = $el("div", { class: "pace-dot green", id: "pace-dot" });
     const paceText = $el("div", { class: "small", id: "pace-text", text: "" });
     tb.appendChild(clock);
-    tb.appendChild(dot);
-    tb.appendChild(paceText);
+    if (!STATE.settings.pacingOff) { tb.appendChild(dot); tb.appendChild(paceText); }
     // F5: pause/resume button.
     const pauseBtn = $el("button", {
       class: sess.pausedAt ? "primary" : "ghost",
@@ -2065,10 +2102,17 @@ function renderQuestion() {
     updateClockUI();
   }
 
+  if (sess.pausedAt) {
+    const pcard = $el("div", { class: "card", style: "text-align:center; padding:24px;" });
+    pcard.appendChild($el("div", { class: "small", text: "Paused. The question is hidden. Click Resume to continue." }));
+    APP.appendChild(pcard);
+    return;
+  }
+
   const head = $el("div", { class: "card" + (sess.pausedAt ? " paused-dim" : "") });
   const headRow = $el("div", { class: "qhead" });
   headRow.appendChild($el("div", { class: "qnum",
-    text: `Question ${sess.idx + 1} of ${sess.length}` }));
+    text: sess.mode === "review" ? ("Reviewing " + sess.ids[sess.idx]) : ("Question " + (sess.idx + 1) + " of " + sess.length) }));
 
   const topicLine = $el("div", { class: "small" });
   for (const t of (q.topics || [])) topicLine.appendChild($el("span", { class: "pill", text: t }));
