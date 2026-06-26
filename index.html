@@ -1965,6 +1965,9 @@ function renderHistoryTab() {
   const adminRow = $el("div", { class: "row", style: "margin-top: 8px; gap: 8px;" });
   adminRow.appendChild($el("button", { class: "ghost", text: "Download stats (jsonl)",
     onclick: () => downloadStats() }));
+  adminRow.appendChild($el("button", { class: "ghost", text: "Download FULL backup (json)",
+    title: "Exports ALL your data (progress, sessions, bookmarks, notes) for moving to mentorprepme.com.",
+    onclick: () => exportFullBackup() }));
   adminRow.appendChild($el("button", { class: "ghost", text: "Erase everything",
     title: "Permanently delete every record for this profile.",
     onclick: () => resetProgress() }));
@@ -2781,6 +2784,28 @@ function endSession(timedOut) {
 
   APP.appendChild(card);
   renderMath(APP);
+}
+
+function exportFullBackup() {
+  const profile = STATE.activeProfile;
+  const prefix = "profile:" + profile + ":";
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.indexOf(prefix) === 0) {
+      const suffix = k.slice(prefix.length);
+      let v = localStorage.getItem(k);
+      try { v = JSON.parse(v); } catch (e) {}
+      data[suffix] = v;
+    }
+  }
+  const payload = { schema: "gre-full-backup-v1", profile: profile, exportedAt: new Date().toISOString(), data: data };
+  const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "gre-full-backup-" + profile + ".json";
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
 }
 
 function downloadStats() {
