@@ -177,6 +177,17 @@
   <input type="text" name="userAgent" />
 </form>
 
+<!-- Netlify Forms hidden form for feature requests. The build crawler picks
+     this up so submissions are accepted. Notifications are set in the Netlify
+     dashboard (route to manager@redsunllc.com). -->
+<form hidden name='feature-request' netlify netlify-honeypot="bot-field" data-netlify="true">
+  <input type="hidden" name="form-name" value="feature-request" />
+  <input type="text" name="bot-field" />
+  <input type="text" name="profile" />
+  <textarea name="request"></textarea>
+  <input type="text" name="userAgent" />
+</form>
+
 <div class="wrap">
 
 <header>
