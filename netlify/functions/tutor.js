@@ -14,7 +14,7 @@
 
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 const ANTHROPIC_VERSION = "2023-06-01";
-const MODEL_ID = process.env.GRE_TUTOR_MODEL || "claude-sonnet-4-6";
+const MODEL_ID = "claude-opus-4-8";
 const MAX_TOKENS_SHORT = 400;
 const MAX_TOKENS_CHAT = 600;
 const TIMEOUT_MS = 25000;
