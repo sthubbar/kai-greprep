@@ -27,7 +27,7 @@ exports.handler = async (event) => {
         phase: 2,
         hasKey: !!process.env.ANTHROPIC_API_KEY,
         hasPassword: !!process.env.ACCESS_PASSWORD,
-        model: process.env.GRE_TUTOR_MODEL || "claude-sonnet-4-6",
+        model: "claude-opus-4-8",
         functions: ["tutor", "generate", "pattern", "health"],
         ts: new Date().toISOString(),
       }),
