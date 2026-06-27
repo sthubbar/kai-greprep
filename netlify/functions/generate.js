@@ -1,4 +1,4 @@
-// Netlify serverless function: generate 3 similar GRE Math Subject practice questions.
+// Netlify serverless function: generate 1 similar GRE Math Subject practice question.
 //
 // POST body:
 //   { source: { question, choices, correctChoice, topics }, password }
@@ -21,7 +21,7 @@ const SYSTEM_PROMPT =
   "Never use the em dash or en dash; use periods, commas, parentheses, or plain hyphens. " +
   "Output ONLY the JSON object. Do not wrap in code fences. Do not prefix with any language tag like jsonl or json. " +
   "Schema: {\"questions\":[{\"id\":\"GEN_xxx\",\"question\":\"...\",\"choices\":[\"...\",\"...\",\"...\",\"...\",\"...\"],\"correct_answer\":0,\"topics\":[\"...\"],\"explanation\":\"...\"}]} " +
-  "where correct_answer is the 0-based index of the correct choice. Generate exactly 3 questions.";
+  "where correct_answer is the 0-based index of the correct choice. Generate exactly 1 question.";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -106,13 +106,13 @@ function buildUserMessage(source) {
     "Seed choices:\n" + c.map((x, i) => `(${i}) ${x}`).join("\n") + "\n\n" +
     "Seed correct answer: " + correct + "\n" +
     "Seed canonical topics: " + topics.join(", ") + "\n\n" +
-    "Generate exactly 3 similar but distinct practice questions in the JSON schema described."
+    "Generate exactly 1 similar but distinct practice question in the JSON schema described."
   );
 }
 
 function validateGenerated(payload) {
   if (!payload || !Array.isArray(payload.questions)) return null;
-  const qs = payload.questions.slice(0, 3).map((q, i) => {
+  const qs = payload.questions.slice(0, 1).map((q, i) => {
     const id = (q.id && /^GEN_/.test(q.id)) ? q.id : `GEN_${Date.now()}_${i}`;
     const question = (q.question || "").toString();
     const choices = Array.isArray(q.choices) ? q.choices.map(x => x.toString()) : [];
@@ -123,7 +123,7 @@ function validateGenerated(payload) {
     if (!question || choices.length < 2) return null;
     return { id, question, choices, correct_answer: correct, topics, explanation };
   }).filter(Boolean);
-  return qs.length === 3 ? qs : null;
+  return qs.length === 1 ? qs : null;
 }
 
 exports.handler = async (event) => {
